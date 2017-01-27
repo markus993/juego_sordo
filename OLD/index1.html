@@ -1,0 +1,316 @@
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.1/fabric.min.js"></script>
+
+<div id="main" role="main">
+    <canvas id="intro-canvas" width="500" height="1850">
+        < !-- Provide fallback -->
+    </canvas>
+</div> 
+<style>
+	#main{
+		display:block;
+		width:80%;
+		padding:50px 10%;
+		height:300px;
+	} 
+</style>
+<script>
+    (function(){
+      fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center';
+      fabric.Object.prototype.transparentCorners = false;
+
+      var canvas = this.__canvas = new fabric.Canvas('intro-canvas');
+	  canvas.forEachObject(function(o){ o.hasBorders = o.hasControls = false; });
+	  canvas.hoverCursor = 'pointer';
+
+      // text
+      var text1 = new fabric.Text('Fabric', {
+        left: 90,
+        top: 570,
+        angle: -5,
+        fontFamily: 'Helvetica',
+        fontSize: 20,
+        fill: 'red'
+      });
+      var text2 = new fabric.Text('has', {
+        fontSize: 60,
+        left: 170,
+        top: 560,
+        fontFamily: 'Impact',
+        fill: '#eee',
+        strokeWidth: 1,
+        stroke: 'red'
+      });
+      var text3 = new fabric.Text('multiline text', {
+        left: 140,
+        top: 615,
+        angle: -5,
+        fontFamily: 'Georgia',
+        fontSize: 20,
+        fontWeight: 'bold',
+        fill: 'green',
+        textBackgroundColor: '#efe'
+      });
+      var text4 = new fabric.Text('with extensive \ndecoration support', {
+        left: 140,
+        top: 660,
+        angle: -5,
+        fontFamily: 'Courier',
+        fontSize: 18,
+        textDecoration: 'underline',
+        fill: 'blue',
+        textAlign: 'center'
+      });
+      var text5 = new fabric.Text('and\neven\nalignment', {
+        left: 140,
+        top: 730,
+        angle: 5,
+        fontFamily: 'Arial',
+        fontStyle: 'italic',
+        fontSize: 20,
+        fill: 'grey',
+        textAlign: 'right'
+      });
+      canvas.add(text1, text2, text3, text4, text5);
+
+      // group
+      var ellipse1 = new fabric.Ellipse({
+        rx: 80,
+        ry: 40,
+        fill: '#800080',
+        stroke: '#555',
+        strokeWidth: 5,
+        angle: 30
+      });
+      var ellipse2 = new fabric.Ellipse({
+        rx: 80,
+        ry: 40,
+        fill: '#FFFF00',
+        stroke: '#555',
+        strokeWidth: 5,
+        angle: -30
+      });
+      var text = new fabric.Text('I am a group!', {
+        fill: '#333',
+        fontFamily: 'Helvetica',
+        fontSize: 17
+      });
+      var group = new fabric.Group([ ellipse1, ellipse2, text ], {
+        left: 400,
+        top: 1000,
+        angle: 30
+      });
+      canvas.add(group);
+
+      // events
+      (function(){
+        var rect = new fabric.Rect({ width: 200, height: 50, fill: '#faa', rx: 10, ry: 10 });
+        var text = new fabric.Text('Do stuff with me!', { fontSize: 20, fontFamily: 'Georgia' });
+        var group = new fabric.Group([ rect, text ], { left: 250, top: 1320 });
+        canvas.add(group).calcOffset();
+		window.ooo = text;
+        group.on('mousedown', function() {
+          text.text = 'Mouse down';
+          group.dirty = true;
+        });
+        group.on('mouseup', function() {
+          text.text = 'Mouse up';
+          group.dirty = true;
+        });
+        group.on('scaling', function() {
+          text.text = 'Scaling';
+          group.dirty = true;
+        });
+        group.on('moving', function() {
+          text.text = 'Moving';
+          group.dirty = true;
+        });
+        group.on('rotating', function() {
+          text.text = 'Rotating';
+          group.dirty = true;
+        });
+        group.on('mousemove', function() {
+          text.text = 'Mouse move';
+          group.dirty = true;
+        });
+        group.on('mouseover', function() {
+          text.text = 'Mouse over';
+          group.dirty = true;
+        });
+        group.on('mouseout', function() {
+          text.text = 'Mouse out';
+          group.dirty = true;
+        });
+        group.on('skewing', function() {
+          text.text = 'skewing';
+          group.dirty = true;
+        });
+      })();
+
+      // clipping
+      fabric.Image.fromURL('images1/tablero.png', function(image) {
+        image.set({
+          left: 250,
+          top: 1350,
+          hasControls: false,
+		  hoverCursor : 'pointer',
+		  borderColor: 'gray',
+          clipTo: function(ctx) {
+            ctx.arc(0, 0, 220, 0, Math.PI * 2, true);
+          }
+        })
+        //.scale(0.3);
+        canvas.add(image).calcOffset();
+      });
+
+      // clipping
+      fabric.Image.fromURL('images1/pera.png', function(image) {
+        image.set({
+          left: 250,
+          top: 1550,
+          clipTo: function(ctx) {
+            ctx.arc(0, 0, 220, 0, Math.PI * 2, true);
+          }
+        })
+        //.scale(0.3);
+        canvas.add(image).calcOffset();
+      });
+
+      // clipping
+      fabric.Image.fromURL('images1/cesta.png', function(image) {
+        image.set({
+          left: 250,
+          top: 1450,
+          clipTo: function(ctx) {
+            ctx.arc(0, 0, 220, 0, Math.PI * 2, true);
+          }
+        })
+        //.scale(0.3);
+        canvas.add(image).calcOffset();
+      });
+
+      // patterns
+      fabric.util.loadImage('images1/bread.png', function(img) {
+        var pattern = new fabric.Pattern({
+          source: img,
+          repeat: 'repeat'
+        });
+        var text = new fabric.Text('Patterns', {
+          fontSize: 150,
+          left: 250,
+          top: 1600,
+          fontFamily: 'Impact',
+          fill: pattern
+        });
+        canvas.add(text);
+      });
+
+      // free drawing
+      var path = {"type":"path","originX":"center","originY":"center","left":173,"top":1800,"width":232,"height":49,"fill":null,"overlayFill":null,"stroke":"#aaf","strokeWidth":10,"strokeDashArray":null,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"selectable":true,"hasControls":true,"hasBorders":true,"hasRotatingPoint":true,"transparentCorners":true,"perPixelTargetFind":false,"shadow":{"color":"#aaf","blur":0,"offsetX":0,"offsetY":0},"visible":true,"path":[["M",0,42],["Q",0,42,0,42],["Q",0,42,0.5,42],["Q",1,42,1,41.5],["Q",1,41,3,39],["Q",5,37,10.5,31],["Q",16,25,24.5,18],["Q",33,11,37,8],["Q",41,5,45.5,2.5],["Q",50,0,52.5,0],["Q",55,0,57,0],["Q",59,0,60,3],["Q",61,6,64,19.5],["Q",67,33,68,37],["Q",69,41,69.5,44],["Q",70,47,71.5,48],["Q",73,49,76,49],["Q",79,49,85.5,44],["Q",92,39,100.5,33],["Q",109,27,113.5,23],["Q",118,19,125.5,16],["Q",133,13,139.5,13.5],["Q",146,14,149,17.5],["Q",152,21,153.5,24],["Q",155,27,156.5,29.5],["Q",158,32,160.5,32.5],["Q",163,33,166,32],["Q",169,31,172,27.5],["Q",175,24,179,20.5],["Q",183,17,185.5,14.5],["Q",188,12,189.5,12],["Q",191,12,192.5,12],["Q",194,12,195.5,15],["Q",197,18,199,19.5],["Q",201,21,203,22.5],["Q",205,24,207.5,24],["Q",210,24,214.5,23.5],["Q",219,23,222.5,20.5],["Q",226,18,229,15.5],["L",232,13]],"pathOffset":{"x":116,"y":24.5}};
+
+      fabric.Path.fromObject(path, function(path) {
+        canvas.add(path);
+
+        path.clone(function(clone) {
+          clone.stroke = '#afa';
+          clone.angle = 180;
+          clone.top -= 50;
+          clone.left += 150;
+          canvas.add(clone);
+        });
+      });
+	  
+  canvas.on('mouse:down', function(e) { selected(e, 1); });
+  canvas.on('mouse:up', function(e) { selected(e, 0); });
+  
+	function selected(e, dir) {
+		if (e.target) {
+		  fabric.util.animate({
+			startValue: e.target.get('angle'),
+			endValue: e.target.get('angle') + (dir ? 10 : -10),
+			duration: 100,
+			onChange: function(value) {
+			  e.target.setAngle(value);
+			  canvas.renderAll();
+			},
+			onComplete: function() {
+			  e.target.setCoords();
+			}
+		  });
+		  fabric.util.animate({
+			startValue: e.target.get('scaleX'),
+			endValue: e.target.get('scaleX') + (dir ? 0.2 : -0.2),
+			duration: 100,
+			onChange: function(value) {
+			  e.target.scale(value);
+			  canvas.renderAll();
+			},
+			onComplete: function() {
+			  e.target.setCoords();
+			}
+		  });
+		}
+	  }
+    })();
+
+
+    // animation
+    fabric.Image.fromURL('images1/apple.png', function(image) {
+      image.set({
+        left: 50,
+        top: 840,
+        angle: 10,
+        opacity: 0.1
+      })
+      .scale(0.6);
+
+      __canvas.add(image);
+
+      this.__image = image;
+    });
+
+    function animate() {
+      var isStart = Math.round(__image.getLeft()) === 50;
+      __image && __image.animate({
+        'left': isStart ? 400 : 50,
+        opacity: isStart ? 1 : 0.1,
+        angle: isStart ? 100 : 10,
+        scaleX: isStart ? 1 : 0.6,
+        scaleY: isStart ? 1 : 0.6
+      }, {
+        duration: 1500,
+        onChange: __canvas.renderAll.bind(__canvas),
+        onComplete: animate
+      });
+    }
+	
+
+	
+	
+    window.onscroll = function() {
+      if (typeof __image === 'undefined') return;
+      animate();
+      window.onscroll = null;
+    };
+	
+	$(document).ready( function(){
+		//Get the canvas &
+		var c = $('#intro-canvas');
+		var ct = c.get(0).getContext('2d');
+		var container = $(c).parent();
+
+		//Run function when browser resizes
+		$(window).resize( respondCanvas );
+
+		function respondCanvas(){
+			c.attr('width', $(container).width() ); //max width
+			//c.attr('height', $(container).height() ); //max height
+
+			//Call a function to redraw other content (texts, images etc)
+		}
+
+		//Initial call
+		respondCanvas();
+	}); 
+  </script>
