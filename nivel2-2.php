@@ -5,7 +5,7 @@
 	<canvas class="" id="canvas" width="640px" height="360px"></canvas>
 </body>
 <script>
-	var nivel = 1;
+	var nivel = 2;
 	var intentos = 5;
 	var objetos = [];
 	var rects = [];
@@ -14,17 +14,17 @@
 	var last_posP = { left:0 , top: 0};
 	var last_posR = { left:0 , top: 0};
 	var rueda_personaje_pos = { left:5, top: 74};
-	var first_personaje_pos = { left: (2/20), top: (16/40)};
+	var first_personaje_pos = { left: (2/20), top: (32/40)};
 
 	var personaje = { nombre: 'personaje', url: 'images/personaje.png', objeto: false, left: first_personaje_pos.left, top: first_personaje_pos.top, selectable: false, scale: 0.5 };
 	var rueda_personaje = { nombre:'rueda_personaje', left: (5), top: (74), fill:'blue',  width:(10), height:(20), opacity:0.5 , resize:false };
 
 	var tablero = { nombre: 'tablero', url: 'images/tablero2.png', objeto: false, left: (1/2), top: (1/2), selectable: false, scale: 2 };
 	var puntajes = { nombre: 'puntajes', url: 'images/tablero2.png', objeto: false, left: (14/18), top: (1/8), selectable: false, scale: 2, scaleX: 1.5,scaleY: 1};
-	var label 	= { nombre: 'label', url: 'images/label2-1.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
-	var meta 	= { nombre: 'meta', url: 'images/meta.png', objeto: false,  left:(45/50), top:(36/40), selectable: false, scale: 0.8 };
+	var label 	= { nombre: 'label', url: 'images/label2-2.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
+	var meta 	= { nombre: 'meta', url: 'images/meta.png', objeto: false,  left:(45/50), top:(37/40), selectable: false, scale: 0.8 };
 
-	var teclado_pos 	= { nombre: 'teclado', left:(2/50), top:(26/40) };
+	var teclado_pos 	= { nombre: 'teclado', left:(22/50), top:(33/40) };
 	var up 	= { nombre: 'up', url: 'images/up.png', objeto: false,  left:(50), top:(0), selectable: false, scale: 0.5 };
 	var down 	= { nombre: 'down', url: 'images/down.png', objeto: false,  left:(50), top:(50), selectable: false, scale: 0.5 };
 	var left 	= { nombre: 'left', url: 'images/left.png', objeto: false,  left:(0), top:(50), selectable: false, scale: 0.5 };
@@ -48,11 +48,13 @@
 	var perdiste_txt = { nombre:'Perdiste', left:(1/2), top:(1/4), fontSize:60, shadow:'rgba(0,0,0,0.3) 5px 5px 5px', fontWeight:'bold', fontStyle:'italic' };
 	var repetir_txt = { nombre:'Repetir', left:(4/8), top:(6/8), fontSize:60, shadow:'rgba(0,0,0,0.3) 5px 5px 5px', fontWeight:'bold', fontStyle:'italic' };
 
-	var rect1 = { nombre:'rect1', left:(0), top:(21/40), fill:'grey', width:(28/20), height:(4/30), opacity:0.1 };
-	var rect2 = { nombre:'rect2', left:(33/50), top:(29/40), fill:'grey', width:(3/40), height:(9/30), opacity:0.1 };
-	var rect3 = { nombre:'rect3', left:(41/50), top:(37/40), fill:'grey', width:(8/20), height:(4/30), opacity:0.1 };
+	var rect1 = { nombre:'rect1', left:(1/20), top:(37/40), fill:'grey', width:(10/20), height:(4/30), opacity:0.7 };
+	var rect2 = { nombre:'rect2', left:(14/50), top:(29/40), fill:'grey', width:(3/40), height:(9/30), opacity:0.7 };
+	var rect3 = { nombre:'rect3', left:(10/20), top:(21/40), fill:'grey', width:(10/20), height:(4/30), opacity:0.7 };
+	var rect4 = { nombre:'rect4', left:(44/60), top:(29/40), fill:'grey', width:(3/40), height:(9/30), opacity:0.7 };
+	var rect5 = { nombre:'rect5', left:(40/50), top:(37/40), fill:'grey', width:(4/20), height:(4/30), opacity:0.7 };
 
-	var fondo = 'images/fondo2-1.png';
+	var fondo = 'images/fondo2-2.png';
 
 	objetos.push(label);
 	objetos.push(puntajes);
@@ -68,6 +70,8 @@
 	rects.push(rect1);
 	rects.push(rect2);
 	rects.push(rect3);
+	rects.push(rect4);
+	rects.push(rect5);
 
 	var viewport = {
 		width : $(document).width()-17,
