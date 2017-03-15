@@ -1,10 +1,14 @@
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.1/fabric.min.js"></script>
+<script src="js/alertify.min.js"></script>
+<link href="css/alertify.min.css" rel="stylesheet">
+<script src="js/jquery-1.12.4.min.js"></script>
+<script src="js/fabric.min.js"></script>
 <script src="js/nivel1.js"></script>
+<script src="js/funciones.js"></script>
 <body onload='init()'>
 	<canvas class="" id="canvas" width="640px" height="360px"></canvas>
 </body>
 <script>
+	var session = readCookie('session');
 	var nivel = 2;
 	var intentos = 5;
 	var audio;
@@ -14,6 +18,7 @@
 	var bien_icono 	= { nombre: 'bien', url: 'images/happy.png', objeto: false, left:(26/30), top: (3/20), conjunto: false, selectable: false, scale: 1.5 };
 	var mal_icono 	= { nombre: 'mal', url: 'images/sad.png', objeto: false, left:(26/30), top: (3/20), conjunto: false, selectable: false, scale: 1.5 };
 	var puntajes = { nombre: 'puntajes', url: 'images/tablero1.png', objeto: false, left: (14/18), top: (1/8), conjunto: false, selectable: false, scale: 2, scaleX: 1.5,scaleY: 1};
+	var menu = { nombre: 'Menu', url: 'images/menu.png', objeto: false, left: (2/18), top: (16/18), conjunto: false, selectable: false, scale: 0.4};
 
 	var punto_negativo_1 	= { nombre: 'punto_negativo_1', url: 'images/sad.png', objeto: false,  left: (12/18), top: (1/8), conjunto: false, selectable: false, scale: 1 };
 	var punto_negativo_2 	= { nombre: 'punto_negativo_2', url: 'images/sad.png', objeto: false,  left: (13/18), top: (1/8), conjunto: false, selectable: false, scale: 1 };
@@ -29,16 +34,65 @@
 
 	var label 	= { nombre: 'label', url: 'images/label1-2.png', objeto: false, left: (4/20), top: (3/20), conjunto: false, selectable: false, scale: 1 };
 
-	var vaso 	= { nombre: 'vaso', url: 'images/vaso.png', objeto: true, left: (5/12), top: (2/8), conjunto: 1, selectable: true, scale: 0.4 };
-	var linterna 	= { nombre: 'linterna', url: 'images/linterna.png', objeto: true, left: (3/12), top: (6/8), conjunto: 1, selectable: true, scale: 0.7 };
-	var botiquin 	= { nombre: 'botiquin', url: 'images/botiquin.png', objeto: true, left: (10/12), top: (6/8), conjunto: 1, selectable: true, scale: 0.4 };
-	var brujula 	= { nombre: 'brujula', url: 'images/brujula.png', objeto: true, left: (8/12), top: (5/8), conjunto: 1, selectable: true, scale: 0.4 };
-	var cinta 	= { nombre: 'cinta', url: 'images/cinta.png', objeto: true, left: (7/12), top: (3/8), conjunto: 1, selectable: true, scale: 0.4 };
-	var lupa 	= { nombre: 'lupa', url: 'images/lupa.png', objeto: true, left: (4/12), top: (4/8), conjunto: 1, selectable: true, scale: 0.3 };
+	var posiciones = {
+		1:{
+			left: 5/12,
+			top: 2/8
+		},
+		2:{
+			left: 3/12,
+			top: 6/8
+		},
+		3:{
+			left: 10/12,
+			top: 6/8
+		},
+		4:{
+			left: 8/12,
+			top: 5/8
+		},
+		5:{
+			left: 7/12,
+			top: 3/8
+		},
+		6:{
+			left: 4/12,
+			top: 4/8
+		},
+		7:{
+			left: 2/12,
+			top: 3/8
+		},
+		8:{
+			left: 10/12,
+			top: 3/8
+		},
+		9:{
+			left: 9/12,
+			top: 2/8
+		}
+	};
+	pos = [1,2,3,4,5,6,7,8,9];
+	pos=shuffle(pos);
+	posXY = posiciones[pos.pop()];
+	var vaso 	= { nombre: 'vaso', url: 'images/vaso.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 1, selectable: true, scale: 0.4 };
+	posXY = posiciones[pos.pop()];
+	var linterna 	= { nombre: 'linterna', url: 'images/linterna.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 1, selectable: true, scale: 0.7 };
+	posXY = posiciones[pos.pop()];
+	var botiquin 	= { nombre: 'botiquin', url: 'images/botiquin.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 1, selectable: true, scale: 0.4 };
+	posXY = posiciones[pos.pop()];
+	var brujula 	= { nombre: 'brujula', url: 'images/brujula.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 1, selectable: true, scale: 0.4 };
+	posXY = posiciones[pos.pop()];
+	var cinta 	= { nombre: 'cinta', url: 'images/cinta.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 1, selectable: true, scale: 0.4 };
+	posXY = posiciones[pos.pop()];
+	var lupa 	= { nombre: 'lupa', url: 'images/lupa.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 1, selectable: true, scale: 0.3 };
+	posXY = posiciones[pos.pop()];
 
-	var tijeras = { nombre: 'tijeras', url: 'images/tijeras.png', objeto: true, left: (2/12), top: (3/8), conjunto: 2, selectable: true, scale: 0.4 };
-	var alicate = { nombre: 'alicate', url: 'images/alicate.png', objeto: true, left: (10/12), top: (3/8), conjunto: 2, selectable: true, scale: 0.5 };
-	var destornillador = { nombre: 'destornillador', url: 'images/destornillador.png', objeto: true, left: (9/12), top: (2/8), conjunto: 2, selectable: true, scale: 0.2 };
+	var tijeras = { nombre: 'tijeras', url: 'images/tijeras.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 2, selectable: true, scale: 0.4 };
+	posXY = posiciones[pos.pop()];
+	var alicate = { nombre: 'alicate', url: 'images/alicate.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 2, selectable: true, scale: 0.5 };
+	posXY = posiciones[pos.pop()];
+	var destornillador = { nombre: 'destornillador', url: 'images/destornillador.png', left: (posXY.left), top: (posXY.top), top: (2/8), conjunto: 2, selectable: true, scale: 0.2 };
 
 	var maletin 	= { nombre: 'maletin', url: 'images/maletin.png', objeto: false, left: (1/2), top: (10/12), conjunto: 1, selectable: false, scale: 1 };
 
@@ -54,6 +108,7 @@
 
 	objetos.push(label);
 	objetos.push(puntajes);
+	objetos.push(menu);
 	objetos.push(maletin);
 	objetos.push(vaso);
 	objetos.push(cinta);

@@ -6,26 +6,76 @@
 	var negativos = 0;
 	var pausado = false;
 	var menu = false;
+	var data = {
+			punto1 : '',
+			punto2 : '',
+			punto3 : '',
+			punto4 : '',
+			punto5 : ''
+		}
 
-  function recargar(){
-    location.reload();
-  }
+	var $_GET = {};
+
+	document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
+		function decode(s) {
+			return decodeURIComponent(s.split("+").join(" "));
+		}
+		$_GET[decode(arguments[1])] = decode(arguments[2]);
+	});
+
+	if (typeof($_GET['data']) !== 'undefined'){
+		dataDec = Base64.decode($_GET['data']);
+		console.log(dataDec);
+		var dataDec = decodeURIComponent( dataDec );
+		dataDec = dataDec.split("&");
+		$.each(dataDec, function( index, value ) {
+			value = value.split("=");
+			console.log(value);
+			switch (value[0]) {
+				case 'punto1':
+					data.punto1=value[1];
+					break;
+				case 'punto2':
+					data.punto2=value[1];
+					break;
+				case 'punto3':
+					data.punto3=value[1];
+					break;
+				case 'punto4':
+					data.punto4=value[1];
+					break;
+				case 'punto5':
+					data.punto5=value[1];
+					break;
+			}
+		});
+	}
+
+	function recargar(){
+		$(location).attr('href', document.location.pathname+'?token='+ readCookie('token'));
+	}
+
+	function recargar_juego(data){
+		console.log(data);
+		dataEnc = Base64.encode($.param( data, true ));
+	  $(location).attr('href', document.location.pathname+'?token='+ readCookie('token')+'&data='+dataEnc);
+	}
 
   function irA(pagina){
     switch (pagina) {
       case 'menu':
-      window.location.assign("/menu");
-      break;
+	      window.location.assign("/menu");
+	      break;
       case 'nivel3.1':
-      window.location.assign("nivel3-1.php");
-      break;
+	      window.location.assign("nivel3-1.php");
+	      break;
       case 'nivel3.2':
       window.location.assign("nivel3-2.php");
-      break;
-      case 'nivel3.3':
+	      break;
+	      case 'nivel3.3':
       window.location.assign("nivel3-3.php");
-      break;
-      default:
+	      break;
+	      default:
     }
   }
 
@@ -46,7 +96,6 @@
 		}else {
 			x = y = param.scale;
 		}
-
     image.set({
       id:param.nombre,
 		  left: viewport.width*param.left,
@@ -64,62 +113,28 @@
     return image;
   }
 
-  function calificar(e){
-		colision = false;
-    canvas.forEachObject(function(obj) {
-      if(obj === undefined)return;
-      if(obj == e)return;
-      if(obj.name == 'personaje')return;
-      if(obj.name == 'rueda_personaje')return;
-			if(obj.name == 'rect1'||obj.name == 'rect2'||obj.name == 'rect3'||obj.name == 'rect4'||obj.name == 'rect5'||obj.name == 'meta'){
-				//console.log(obj.name);
-				//console.log('colision:'+e.intersectsWithObject(obj));
-				if(e.intersectsWithObject(obj)){
-					colision = true;
-					if(obj.name == 'meta'){
-						mostrar_menu('meta');
-						pausado = true;
-						menu = true;
-					}
-				}
-			}
-    });
-		if(!colision){
-			//console.log(intentos);
-			switch (intentos) {
-				case 1:
-					load_object(punto_negativo_5);
-					mostrar_menu();
-					pausado = true;
-					menu = true;
-					break;
-				case 2:
-					load_object(punto_negativo_4);
-					break;
-				case 3:
-					load_object(punto_negativo_3);
-					break;
-				case 4:
-					load_object(punto_negativo_2);
-					break;
-				case 5:
-					load_object(punto_negativo_1);
-					break;
-				default:
-			}
-			intentos--;
-			e.left =  (viewport.width * first_personaje_pos.left)+ rueda_personaje_pos.left;
-			e.top = (viewport.height * first_personaje_pos.top)+ rueda_personaje_pos.top;
-			personaje.left = (viewport.width * first_personaje_pos.left);
-			personaje.top = (viewport.height * first_personaje_pos.top);
-			e.setCoords();
-			personaje.setCoords();
-		}
-  }
-
 	function selected(e, dir) {
 		//console.log(e.target.name);
 		if(e.target == null) return;
+
+		switch(e.target.name) {
+			case 'Menu':
+				salir_menu();
+				return;
+				break;
+			case 'Salir':
+				carga_pagina('temas.php');
+				return;
+				break;
+			case 'Repetir':
+				recargar();
+				return;
+				break;
+			case 'Siguiente':
+				carga_pagina('nivel3-'+(juego+1)+'.php');
+				return;
+				break;
+		}
 
 		switch (operacion) {
 			case 'mas':
@@ -127,59 +142,85 @@
 					if(numero1 > numero2){
 						console.log('positivo1+');
 						positivos++;
-					}else {
+						data_process(1,data);
+					}else{
 						console.log('negativo1+');
 						negativos++;
+						data_process(0,data);
 					}
 				}
 				if(e.target.conjunto == 2){
 					if(numero1 < numero2){
 						console.log('positivo2+');
 						positivos++;
-					}else {
+						data_process(1,data);
+					}else{
 						console.log('negativo2+');
 						negativos++;
+						data_process(0,data);
 					}
 				}
-				mostrar_menu();
 				break;
 			case 'menos':
 				if(e.target.conjunto == 1){
 					if(numero1 < numero2){
 						console.log('positivo1-');
 						positivos++;
-					}else {
+						data_process(1,data);
+					}else{
 						console.log('negativo1-');
 						negativos++;
+						data_process(0,data);
 					}
 				}
 				if(e.target.conjunto == 2){
 					if(numero1 > numero2){
 						console.log('positivo2-');
 						positivos++;
-					}else {
+						data_process(1,data);
+					}else{
 						console.log('negativo2-');
 						negativos++;
+						data_process(0,data);
 					}
 				}
-				mostrar_menu();
 				break;
-			default:
 		}
-
-    switch(e.target.name) {
-      case 'Salir':
-	      irA('menu');
-	      break;
-      case 'Repetir':
-	      recargar();
-	      break;
-      case 'Siguiente':
-	      //console.log('nivel3.'+(nivel+1));
-	      irA('nivel3.'+(nivel+1));
-	      break;
-    }
   }
+
+	function data_process(punto,data) {
+		asignado = false;
+		var pos = 0;
+		var neg = 0;
+		$.each(data, function( index, value ) {
+			if(data[index]=='' && asignado == false){
+				data[index] = punto;
+				asignado = true;
+				envia_punto(3, juego, index, punto);
+				if(punto == 1){
+					pos++;
+				}else {
+					neg++;
+				}
+			}else{
+				switch (value) {
+					case '1':
+						pos++;
+						break;
+					case '0':
+						neg++;
+						break;
+				}
+			}
+		});
+		console.log('positivos: '+pos);
+		console.log('negativos: '+neg);
+		if(pos+neg == 5){
+			mostrar_menu();
+		}else{
+			recargar_juego(data);
+		}
+	}
 
 	function mostrar_menu(evento){
 		var rect = new fabric.Rect({
@@ -197,11 +238,13 @@
 		mensaje_caja(repetir_txt);
 		mensaje_caja(salir_txt);
 		if(positivos > negativos){
+			envia_resultado(juego,1);
 			mensaje_caja(ganaste_txt);
 		}else {
+			envia_resultado(juego,0);
 			mensaje_caja(perdiste_txt);
 		}
-		if(nivel !=3)
+		if(juego !=3)
 			mensaje_caja(siguiente_txt);
 	}
 
@@ -357,8 +400,19 @@
     });
     objetos.forEach(load_object);
 
+		switch (juego) {
+			case 1:
+				max = 10;
+				break;
+			case 2:
+				max = 9;
+				break;
+			case 3:
+				max = 10;
+				break;
+		}
 		//numero = tabla_pos1.length;
-		numero1 = getRandomInt(1, 10);
+		numero1 = getRandomInt(1, max);
 		count = 0;
 
 		while (numero1 > count ) {
@@ -369,16 +423,19 @@
 																left:pos[0],
 																top:pos[1],
 																conjunto:1,
-																selectable:false
+																selectable:false,
+																scaleX: escala,
+																scaleY: escala,
                               });
 			count++;
 		}
 
 		//numero = tabla_pos2.length;
-		numero2 = getRandomInt(1, 10);
+		numero2 = getRandomInt(1, max);
 		if(numero1 == numero2)
-			numero2 = getRandomInt(1, 10);
+			numero2 = getRandomInt(1, max);
 		count = 0;
+
 		while (numero2 > count ) {
 			pos = tabla_pos2[count];
 			fabric.Image.fromURL(repetir.url, function(img) {
@@ -387,7 +444,9 @@
 																left:pos[0],
 																top:pos[1],
 																conjunto:2,
-																selectable:false
+																selectable:false,
+																scaleX: escala,
+																scaleY: escala,
                               });
 			count++;
 		}
@@ -401,17 +460,65 @@
 			load_object(menos);
 			operacion = 'menos';
 		}
-  }
 
-	function check_position(){
-		//console.log('check_position');
-		rueda_personaje.set({
-			top:personaje.top+rueda_personaje_pos.top,
-			left:personaje.left+rueda_personaje_pos.left,
+		$.each(data, function( index, value ) {
+			console.log(index);
+			console.log(value);
+			switch (index) {
+				case 'punto1':
+					switch (value) {
+						case '1':
+							load_object(punto_positivo_1);
+							break;
+						case '0':
+							load_object(punto_negativo_1);
+							break;
+					}
+					break;
+				case 'punto2':
+					switch (value) {
+						case '1':
+							load_object(punto_positivo_2);
+							break;
+						case '0':
+							load_object(punto_negativo_2);
+							break;
+					}
+					break;
+				case 'punto3':
+					switch (value) {
+						case '1':
+							load_object(punto_positivo_3);
+							break;
+						case '0':
+							load_object(punto_negativo_3);
+							break;
+					}
+					break;
+				case 'punto4':
+					switch (value) {
+						case '1':
+							load_object(punto_positivo_4);
+							break;
+						case '0':
+							load_object(punto_negativo_4);
+							break;
+					}
+					break;
+				case 'punto5':
+					switch (value) {
+						case '1':
+							load_object(punto_positivo_5);
+							break;
+						case '0':
+							load_object(punto_negativo_5);
+							break;
+					}
+					break;
+			}
 		});
-		rueda_personaje.setCoords();
-		calificar(rueda_personaje);
-	}
+		console.log(data);
+  }
 
   function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {

@@ -1,12 +1,18 @@
+<script src="js/alertify.min.js"></script>
+<link href="css/alertify.min.css" rel="stylesheet">
 <script src="js/jquery-1.12.4.min.js"></script>
+<script src="js/base64.js"></script>
 <script src="js/fabric.min.js"></script>
 <script src="js/nivel3.js"></script>
+<script src="js/funciones.js"></script>
 <body onload='init()'>
 	<canvas class="" id="canvas" width="640px" height="360px"></canvas>
 </body>
 <script>
+	var juego = readCookie('juego');
 	var nivel = 2;
 	var intentos = 5;
+	var escala = 0.5;
 	var objetos = [];
 	var rects = [];
 	var teclado = [];
@@ -16,15 +22,16 @@
 	var rueda_personaje_pos = { left:5, top: 74};
 	var first_personaje_pos = { left: (1/2), top: (3/4)};
 
-	var personaje = { nombre: 'personaje', url: 'images/personaje.png', objeto: false, left: first_personaje_pos.left, top: first_personaje_pos.top, selectable: false, scale: 0.8 };
+	var personaje = { nombre: 'personaje', url: 'images/personaje.png', objeto: false, left: first_personaje_pos.left, top: first_personaje_pos.top, selectable: false, scale: escala };
 	var rueda_personaje = { nombre:'rueda_personaje', left: (5), top: (74), fill:'blue',  width:(10), height:(20), opacity:0.5 , resize:false };
 
 	var tablero = { nombre: 'tablero', url: 'images/tablero3.png', objeto: false, left: (1/2), top: (1/2), selectable: false, scale: 2 };
 	var puntajes = { nombre: 'puntajes', url: 'images/tablero3.png', objeto: false, left: (14/18), top: (1/8), selectable: false, scale: 2, scaleX: 1.5,scaleY: 1};
 	var label = { nombre: 'label', url: 'images/label3-2.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
 	var repetir = { nombre: 'cabano', url: 'images/cabano.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
-	var mas = { nombre: 'mas', url: 'images/mas.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: 1 };
-	var menos = { nombre: 'menos', url: 'images/menos.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: 1 };
+	var mas = { nombre: 'mas', url: 'images/mas.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: escala };
+	var menos = { nombre: 'menos', url: 'images/menos.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: escala };
+	var menu = { nombre: 'Menu', url: 'images/menu.png', objeto: false, left: (23/50), top: (7/50), conjunto: false, selectable: false, scale: 0.4};
 
 	var punto_negativo_1 	= { nombre: 'punto_negativo_1', url: 'images/sad.png', objeto: false,  left: (12/18), top: (1/8), selectable: false, scale: 1 };
 	var punto_negativo_2 	= { nombre: 'punto_negativo_2', url: 'images/sad.png', objeto: false,  left: (13/18), top: (1/8), selectable: false, scale: 1 };
@@ -47,11 +54,12 @@
 	var fondo = 'images/fondo3-2.png';
 
 	objetos.push(label);
+	objetos.push(menu);
 	objetos.push(puntajes);
 	objetos.push(personaje);
 
-	var rect1 = { nombre:'rect1', left:(4/20), top:(17/20), fill:'grey', width:(8/20), height:(6/20), opacity:0.1, conjunto:1 };
-	var rect2 = { nombre:'rect2', left:(16/20), top:(17/20), fill:'grey', width:(8/20), height:(6/20), opacity:0.1, conjunto:2 };
+	var rect1 = { nombre:'rect1', left:(4/20), top:(20/30), fill:'grey', width:(8/20), height:(10/20), opacity:0.1, conjunto:1 };
+	var rect2 = { nombre:'rect2', left:(15/20), top:(20/30), fill:'grey', width:(8/20), height:(10/20), opacity:0.1, conjunto:2 };
 
 	rects.push(rect1);
 	rects.push(rect2);
@@ -66,32 +74,26 @@
 
 	var tabla_pos1 = [];
 
-	tabla_pos1.push([(viewport.width * (2/20)), (viewport.height * (19/20))]);
-	tabla_pos1.push([(viewport.width * (4/20)), (viewport.height * (19/20))]);
-	tabla_pos1.push([(viewport.width * (6/20)), (viewport.height * (19/20))]);
-
-	tabla_pos1.push([(viewport.width * (1/20)), (viewport.height * (17/20))]);
-	tabla_pos1.push([(viewport.width * (3/20)), (viewport.height * (17/20))]);
-	tabla_pos1.push([(viewport.width * (5/20)), (viewport.height * (17/20))]);
-	tabla_pos1.push([(viewport.width * (7/20)), (viewport.height * (17/20))]);
-
-	tabla_pos1.push([(viewport.width * (2/20)), (viewport.height * (15/20))]);
-	tabla_pos1.push([(viewport.width * (4/20)), (viewport.height * (15/20))]);
-	tabla_pos1.push([(viewport.width * (6/20)), (viewport.height * (15/20))]);
+	tabla_pos1.push([(viewport.width * (8/40)), (viewport.height * (24/30))]);
+	tabla_pos1.push([(viewport.width * (10/40)), (viewport.height * (22/30))]);
+	tabla_pos1.push([(viewport.width * (6/40)), (viewport.height * (22/30))]);
+	tabla_pos1.push([(viewport.width * (4/40)), (viewport.height * (20/30))]);
+	tabla_pos1.push([(viewport.width * (12/40)), (viewport.height * (20/30))]);
+	tabla_pos1.push([(viewport.width * (8/40)), (viewport.height * (20/30))]);
+	tabla_pos1.push([(viewport.width * (10/40)), (viewport.height * (18/30))]);
+	tabla_pos1.push([(viewport.width * (6/40)), (viewport.height * (18/30))]);
+	tabla_pos1.push([(viewport.width * (8/40)), (viewport.height * (16/30))]);
 
 	var tabla_pos2 = [];
 
-	tabla_pos2.push([(viewport.width * (14/20)), (viewport.height * (19/20))]);
-	tabla_pos2.push([(viewport.width * (16/20)), (viewport.height * (19/20))]);
-	tabla_pos2.push([(viewport.width * (18/20)), (viewport.height * (19/20))]);
-
-	tabla_pos2.push([(viewport.width * (13/20)), (viewport.height * (17/20))]);
-	tabla_pos2.push([(viewport.width * (15/20)), (viewport.height * (17/20))]);
-	tabla_pos2.push([(viewport.width * (17/20)), (viewport.height * (17/20))]);
-	tabla_pos2.push([(viewport.width * (19/20)), (viewport.height * (17/20))]);
-
-	tabla_pos2.push([(viewport.width * (14/20)), (viewport.height * (15/20))]);
-	tabla_pos2.push([(viewport.width * (16/20)), (viewport.height * (15/20))]);
-	tabla_pos2.push([(viewport.width * (18/20)), (viewport.height * (15/20))]);
+	tabla_pos2.push([(viewport.width * (29/40)), (viewport.height * (24/30))]);
+	tabla_pos2.push([(viewport.width * (31/40)), (viewport.height * (22/30))]);
+	tabla_pos2.push([(viewport.width * (27/40)), (viewport.height * (22/30))]);
+	tabla_pos2.push([(viewport.width * (25/40)), (viewport.height * (20/30))]);
+	tabla_pos2.push([(viewport.width * (33/40)), (viewport.height * (20/30))]);
+	tabla_pos2.push([(viewport.width * (29/40)), (viewport.height * (20/30))]);
+	tabla_pos2.push([(viewport.width * (31/40)), (viewport.height * (18/30))]);
+	tabla_pos2.push([(viewport.width * (27/40)), (viewport.height * (18/30))]);
+	tabla_pos2.push([(viewport.width * (29/40)), (viewport.height * (16/30))]);
 
 </script>

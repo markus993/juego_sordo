@@ -1,10 +1,14 @@
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.1/fabric.min.js"></script>
+<script src="js/alertify.min.js"></script>
+<link href="css/alertify.min.css" rel="stylesheet">
+<script src="js/jquery-1.12.4.min.js"></script>
+<script src="js/fabric.min.js"></script>
 <script src="js/nivel2.js"></script>
+<script src="js/funciones.js"></script>
 <body onload='init()'>
 	<canvas class="" id="canvas" width="640px" height="360px"></canvas>
 </body>
 <script>
+	var session = readCookie('session');
 	var nivel = 3;
 	var intentos = 5;
 	var objetos = [];
@@ -23,6 +27,7 @@
 	var puntajes = { nombre: 'puntajes', url: 'images/tablero2.png', objeto: false, left: (14/18), top: (1/8), selectable: false, scale: 2, scaleX: 1.5,scaleY: 1};
 	var label 	= { nombre: 'label', url: 'images/label2-3.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
 	var meta 	= { nombre: 'meta', url: 'images/meta.png', objeto: false,  left:(34/50), top:(25/40), selectable: false, scale: 0.7 };
+	var menu = { nombre: 'Menu', url: 'images/menu.png', objeto: false, left: (23/50), top: (7/50), conjunto: false, selectable: false, scale: 0.4};
 
 	var teclado_pos 	= { nombre: 'teclado', left:(14/50), top:(22/40) };
 	var up 	= { nombre: 'up', url: 'images/up.png', objeto: false,  left:(50), top:(0), selectable: false, scale: 0.5 };
@@ -48,15 +53,16 @@
 	var perdiste_txt = { nombre:'Perdiste', left:(1/2), top:(1/4), fontSize:60, shadow:'rgba(0,0,0,0.3) 5px 5px 5px', fontWeight:'bold', fontStyle:'italic' };
 	var repetir_txt = { nombre:'Repetir', left:(4/8), top:(6/8), fontSize:60, shadow:'rgba(0,0,0,0.3) 5px 5px 5px', fontWeight:'bold', fontStyle:'italic' };
 
-	var rect1 = { nombre:'rect1', left:(18/40), top:(37/40), fill:'grey', width:(37/40), height:(4/30), opacity:0.7 };
-	var rect2 = { nombre:'rect2', left:(53/60), top:(25/40), fill:'grey', width:(4/60), height:(15/30), opacity:0.7 };
-	var rect3 = { nombre:'rect3', left:(20/30), top:(20/60), fill:'grey', width:(10/20), height:(3/30), opacity:0.7 };
-	var rect4 = { nombre:'rect4', left:(31/70), top:(20/40), fill:'grey', width:(4/60), height:(9/30), opacity:0.7 };
-	var rect5 = { nombre:'rect5', left:(28/50), top:(25/40), fill:'grey', width:(6/20), height:(3/30), opacity:0.7 };
+	var rect1 = { nombre:'rect1', left:(18/40), top:(37/40), fill:'grey', width:(37/40), height:(4/30), opacity:0.1 };
+	var rect2 = { nombre:'rect2', left:(53/60), top:(25/40), fill:'grey', width:(4/60), height:(15/30), opacity:0.1 };
+	var rect3 = { nombre:'rect3', left:(20/30), top:(20/60), fill:'grey', width:(10/20), height:(3/30), opacity:0.1 };
+	var rect4 = { nombre:'rect4', left:(31/70), top:(20/40), fill:'grey', width:(4/60), height:(9/30), opacity:0.1 };
+	var rect5 = { nombre:'rect5', left:(28/50), top:(25/40), fill:'grey', width:(6/20), height:(3/30), opacity:0.1 };
 
 	var fondo = 'images/fondo2-3.png';
 
 	objetos.push(label);
+	objetos.push(menu);
 	objetos.push(puntajes);
 	objetos.push(meta);
 	objetos.push(personaje);

@@ -1,12 +1,22 @@
+<script src="js/alertify.min.js"></script>
+<link href="css/alertify.min.css" rel="stylesheet">
 <script src="js/jquery-1.12.4.min.js"></script>
+<script src="js/base64.js"></script>
 <script src="js/fabric.min.js"></script>
 <script src="js/nivel3.js"></script>
+<script src="js/funciones.js"></script>
 <body onload='init()'>
 	<canvas class="" id="canvas" width="640px" height="360px"></canvas>
 </body>
 <script>
+	var juego = readCookie('juego');
+	if (juego == null) {
+		juego = nuevo_juego(3);
+		createCookie('juego', juego, 1)
+	}
 	var nivel = 1;
 	var intentos = 5;
+	var escala = 1;
 	var objetos = [];
 	var rects = [];
 	var teclado = [];
@@ -25,6 +35,7 @@
 	var repetir = { nombre: 'balon', url: 'images/balon.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
 	var mas = { nombre: 'mas', url: 'images/mas.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: 1 };
 	var menos = { nombre: 'menos', url: 'images/menos.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: 1 };
+	var menu = { nombre: 'Menu', url: 'images/menu.png', objeto: false, left: (23/50), top: (7/50), conjunto: false, selectable: false, scale: 0.4};
 
 	var punto_negativo_1 	= { nombre: 'punto_negativo_1', url: 'images/sad.png', objeto: false,  left: (12/18), top: (1/8), selectable: false, scale: 1 };
 	var punto_negativo_2 	= { nombre: 'punto_negativo_2', url: 'images/sad.png', objeto: false,  left: (13/18), top: (1/8), selectable: false, scale: 1 };
@@ -47,6 +58,7 @@
 	var fondo = 'images/fondo3-1.png';
 
 	objetos.push(label);
+	objetos.push(menu);
 	objetos.push(puntajes);
 	objetos.push(personaje);
 

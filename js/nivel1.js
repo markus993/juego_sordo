@@ -3,28 +3,14 @@
 	var ganaste;
 	var salir;
 	var positivos = 0;
+	var positivos_1 = 0;
+	var positivos_2 = 0;
 	var negativos = 0;
+	var negativos_1 = 0;
+	var negativos_2 = 0;
 
   function recargar(){
     location.reload();
-  }
-
-  function irA(pagina){
-    switch (pagina) {
-      case 'menu':
-      window.location.assign("/menu");
-      break;
-      case 'nivel1.1':
-      window.location.assign("nivel1-1.php");
-      break;
-      case 'nivel1.2':
-      window.location.assign("nivel1-2.php");
-      break;
-      case 'nivel1.3':
-      window.location.assign("nivel1-3.php");
-      break;
-      default:
-    }
   }
 
   function load_object(obj){
@@ -78,19 +64,21 @@
   }
 
   function selected(e, dir) {
-		console.log(e.target);
 		if(e.target == null) return;
     switch(e.target.name) {
+      case 'Menu':
+				salir_menu();
+      	break;
       case 'Salir':
-      irA('menu');
-      break;
+	      eraseCookie('juego');
+				carga_pagina('temas.php');
+      	break;
       case 'Repetir':
-      recargar();
-      break;
+      	recargar();
+      	break;
       case 'Siguiente':
-      console.log('nivel1.'+(nivel+1));
-      irA('nivel1.'+(nivel+1));
-      break;
+				carga_pagina('nivel1-'+(nivel+1)+'.php');
+      	break;
       default:
       if (e.target && e.target.objeto == true) {
         if(dir == 1){
@@ -108,8 +96,8 @@
             if(e.target.intersectsWithObject(obj)){
               if( obj.conjunto == e.target.conjunto ) {
                 if(obj.name == 'cesta' || obj.name == 'maletin'){
-									positivos++;
 									if(nivel!=3){
+										positivos++;
 										switch (intentos) {
 											case 1:
 												load_object(punto_positivo_5);
@@ -131,6 +119,7 @@
 										intentos--;
 									}else{
 										if(obj.name == 'cesta'){
+											positivos_1++;
 											switch (intentos_1) {
 												case 1:
 													load_object(punto_positivo_1_5);
@@ -151,6 +140,7 @@
 											}
 											intentos_1--;
 										}else{
+											positivos_2++;
 											switch (intentos_2) {
 												case 1:
 													load_object(punto_positivo_2_5);
@@ -172,13 +162,18 @@
 											intentos_2--;
 										}
 									}
+									if (nivel != 3) {
+										envia_punto(juego,1, nivel, 5-intentos, 'true');
+									}else {
+										envia_punto(juego,1, nivel, (10-intentos_1-intentos_2), 'true');
+									}
                   e.target.remove();
 									canvas.renderAll.bind(canvas);
                 }
               }else{
-								negativos++;
                 if(obj.name == 'cesta' || obj.name == 'maletin'){
 									if(nivel!=3){
+										negativos++;
 										switch (intentos) {
 											case 1:
 												load_object(punto_negativo_5);
@@ -200,6 +195,7 @@
 										intentos--;
 									}else{
 										if (obj.name == 'cesta') {
+											negativos_1++;
 											switch (intentos_1) {
 												case 1:
 													load_object(punto_negativo_1_5);
@@ -220,6 +216,7 @@
 											}
 											intentos_1--;
 										}else {
+											negativos_2++;
 											switch (intentos_2) {
 												case 1:
 													load_object(punto_negativo_2_5);
@@ -241,7 +238,11 @@
 											intentos_2--;
 										}
 									}
-
+									if (nivel != 3) {
+										envia_punto(juego,1, nivel, 5-intentos, 'false');
+									}else {
+										envia_punto(juego,1, nivel, (10-intentos_1-intentos_2), 'false');
+									}
                   e.target.left = last_pos.left;
                   e.target.top = last_pos.top;
                   e.target.setCoords();
@@ -255,7 +256,10 @@
 							mostrar_menu();
 						}
 					}else{
-						if(intentos_1==0 ||intentos_2==0){
+						console.log('intentos_1: '+intentos_1);
+						console.log('intentos_2: '+intentos_2);
+						if(intentos_1<=0 && intentos_2<=0){
+							console.log('mostrar_menu');
 							mostrar_menu();
 						}
 					}
@@ -272,17 +276,31 @@
 			originY: 'top',
 			left: 0,
 			top: 0,
+			selectable : false,
 			width: viewport.width,
 			height: viewport.height,
 		});
 		canvas.add(rect)
 		mensaje_caja(repetir_txt);
 		mensaje_caja(salir_txt);
-		if(positivos>negativos){
-			mensaje_caja(ganaste_txt);
+		if (nivel!=3) {
+			if(positivos>negativos){
+				envia_resultado(juego,1,nivel);
+				mensaje_caja(ganaste_txt);
+			}else {
+				envia_resultado(juego,0,nivel);
+				mensaje_caja(perdiste_txt);
+			}
 		}else {
-			mensaje_caja(perdiste_txt);
+			if(positivos_1>negativos_1 && positivos_2>negativos_2){
+				envia_resultado(juego,1,nivel);
+				mensaje_caja(ganaste_txt);
+			}else {
+				envia_resultado(juego,0,nivel);
+				mensaje_caja(perdiste_txt);
+			}
 		}
+
 		if(nivel !=3)
 			mensaje_caja(siguiente_txt);
 	}

@@ -6,26 +6,23 @@
 	var negativos = 0;
 	var pausado = false;
 	var menu = false;
-
-  function recargar(){
-    location.reload();
-  }
+	var salto = 70;
 
   function irA(pagina){
     switch (pagina) {
-      case 'menu':
+      case 'menu' :
       window.location.assign("/menu");
       break;
-      case 'nivel2.1':
+      case 'nivel2.1' :
       window.location.assign("nivel2-1.php");
       break;
-      case 'nivel2.2':
+      case 'nivel2.2' :
       window.location.assign("nivel2-2.php");
       break;
-      case 'nivel2.3':
+      case 'nivel2.3' :
       window.location.assign("nivel2-3.php");
       break;
-      default:
+      default :
     }
   }
 
@@ -60,14 +57,14 @@
 			heightS = viewport.height*obj.height;
 		}
 		var rect = new fabric.Rect({
-		  name: obj.nombre,
-      left: leftS,
-      top: topS,
-		  fill: obj.fill,
-		  opacity: obj.opacity,
-			selectable: false,
-		  width: widthS,
-		  height: heightS
+		  name : obj.nombre,
+      left : leftS,
+      top : topS,
+		  fill : obj.fill,
+		  opacity : obj.opacity,
+			selectable : false,
+		  width : widthS,
+		  height : heightS
 		});
 		canvas.add(rect).calcOffset();
 		evaluar = obj.nombre+"= rect ;";
@@ -76,15 +73,15 @@
 
   function new_key(image,param){
     image.set({
-      id:param.nombre,
-		  left: (viewport.width*teclado_pos.left)+param.left,
-		  top: (viewport.height*teclado_pos.top)+param.top,
-      hasControls: false,
+      id : param.nombre,
+		  left : (viewport.width*teclado_pos.left)+param.left,
+		  top : (viewport.height*teclado_pos.top)+param.top,
+      hasControls : false,
       hasBorders : false,
       hoverCursor : 'pointer',
-			selectable: false,
-      name:param.nombre,
-      objeto:param.objeto
+			selectable : false,
+      name : param.nombre,
+      objeto : param.objeto
     }).scale( param.scale);
     return image;
   }
@@ -97,18 +94,18 @@
 			x = y = param.scale;
 		}
     image.set({
-      id:param.nombre,
-		  left: viewport.width*param.left,
-		  top: viewport.height*param.top,
-      hasControls: false,
+      id : param.nombre,
+		  left : viewport.width*param.left,
+		  top : viewport.height*param.top,
+      hasControls : false,
       hasBorders : false,
       hoverCursor : 'pointer',
-      name:param.nombre,
-      objeto:param.objeto,
-      selectable: param.selectable,
-      conjunto:param.conjunto,
-			scaleX:x,
-			scaleY:y
+      name : param.nombre,
+      objeto : param.objeto,
+      selectable : param.selectable,
+      conjunto : param.conjunto,
+			scaleX : x,
+			scaleY : y
     });
     return image;
   }
@@ -121,11 +118,14 @@
       if(obj.name == 'personaje')return;
       if(obj.name == 'rueda_personaje')return;
 			if(obj.name == 'rect1'||obj.name == 'rect2'||obj.name == 'rect3'||obj.name == 'rect4'||obj.name == 'rect5'||obj.name == 'meta'){
-				console.log(obj.name);
-				console.log('colision:'+e.intersectsWithObject(obj));
+				//console.log(obj.name);
+				//console.log('colision : '+e.intersectsWithObject(obj));
 				if(e.intersectsWithObject(obj)){
 					colision = true;
 					if(obj.name == 'meta'){
+						console.log(data);
+						envia_punto(juego,2, nivel, 5-intentos, true);
+						envia_resultado(juego,1,nivel)
 						mostrar_menu('meta');
 						pausado = true;
 						menu = true;
@@ -136,28 +136,31 @@
 		if(!colision){
 			console.log(intentos);
 			switch (intentos) {
-				case 1:
+				case 1 :
 					load_object(punto_negativo_5);
 					mostrar_menu();
+					envia_resultado(juego,0,nivel)
 					pausado = true;
 					menu = true;
 					break;
-				case 2:
+				case 2 :
 					load_object(punto_negativo_4);
 					break;
-				case 3:
+				case 3 :
 					load_object(punto_negativo_3);
 					break;
-				case 4:
+				case 4 :
 					load_object(punto_negativo_2);
 					break;
-				case 5:
+				case 5 :
 					load_object(punto_negativo_1);
 					break;
-				default:
+				default :
 			}
 			intentos--;
-			e.left =  (viewport.width * first_personaje_pos.left)+ rueda_personaje_pos.left;
+
+			envia_punto(juego,2, nivel, 5-intentos, false);
+			e.left = (viewport.width * first_personaje_pos.left)+ rueda_personaje_pos.left;
 			e.top = (viewport.height * first_personaje_pos.top)+ rueda_personaje_pos.top;
 			personaje.left = (viewport.width * first_personaje_pos.left);
 			personaje.top = (viewport.height * first_personaje_pos.top);
@@ -167,30 +170,31 @@
   }
 
 	function selected(e, dir) {
-		console.log(e.target.name);
 		if(e.target == null) return;
     switch(e.target.name) {
-      case 'Salir':
-	      irA('menu');
+			case 'Menu' :
+				salir_menu();
+				break;
+			case 'Salir' :
+				carga_pagina('temas.php');
+				break;
+			case 'Repetir' :
+				recargar();
+				break;
+			case 'Siguiente' :
+				carga_pagina('nivel2-'+(nivel+1)+'.php');
+				break;
+      case 'left' :
+	      changePosition('left');
 	      break;
-      case 'Repetir':
-	      recargar();
+      case 'right' :
+	      changePosition('right');
 	      break;
-      case 'Siguiente':
-	      console.log('nivel2.'+(nivel+1));
-	      irA('nivel2.'+(nivel+1));
+      case 'up' :
+	      changePosition('up');
 	      break;
-      case 'left':
-	      changePositionTeclado('left');
-	      break;
-      case 'right':
-	      changePositionTeclado('right');
-	      break;
-      case 'up':
-	      changePositionTeclado('up');
-	      break;
-      case 'down':
-	      changePositionTeclado('down');
+      case 'down' :
+	      changePosition('down');
 	      break;
     }
   }
@@ -204,15 +208,15 @@
 
 	function mostrar_menu(evento){
 		var rect = new fabric.Rect({
-			fill: 'black',
-			opacity: 0.4,
-			originX: 'left',
-			originY: 'top',
-			left: 0,
-			top: 0,
-			selectable:false,
-			width: viewport.width,
-			height: viewport.height,
+			fill : 'black',
+			opacity : 0.4,
+			originX : 'left',
+			originY : 'top',
+			left : 0,
+			top : 0,
+			selectable : false,
+			width : viewport.width,
+			height : viewport.height,
 		});
 		canvas.add(rect)
 		mensaje_caja(repetir_txt);
@@ -229,44 +233,44 @@
   function mensaje_caja(txt){
     fabric.Image.fromURL(tablero.url, function(image) {
       image.set({
-        left: 100,
-        top: 50,
-        shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
-        hasControls: false,
+        left : 100,
+        top : 50,
+        shadow : 'rgba(0,0,0,0.3) 5px 5px 5px',
+        hasControls : false,
         hasBorders : false,
         hoverCursor : 'pointer',
-        name:tablero.nombre,
-        objeto:tablero.objeto,
-        selectable: tablero.selectable,
-        conjunto:tablero.conjunto
+        name : tablero.nombre,
+        objeto : tablero.objeto,
+        selectable : tablero.selectable,
+        conjunto : tablero.conjunto
       }).scale(1);
       texto_mensaje = null;
       var texto_mensaje = new fabric.Text(txt.nombre, {
-        left: 100,
-        top: 50,
-        fontSize: txt.fontSize,
-        fill: 'white',
-        fontWeight: txt.fontWeight,
-        fontStyle: txt.fontStyle,
-        shadow: txt.shadow,
-        hasControls: false,
+        left : 100,
+        top : 50,
+        fontSize : txt.fontSize,
+        fill : 'white',
+        fontWeight : txt.fontWeight,
+        fontStyle : txt.fontStyle,
+        shadow : txt.shadow,
+        hasControls : false,
         hasBorders : false,
         hoverCursor : 'pointer',
-        name:txt.nombre+'_txt',
-        objeto:false,
-        selectable: false,
-        conjunto: false
+        name : txt.nombre+'_txt',
+        objeto : false,
+        selectable : false,
+        conjunto : false
       });
       caja = new fabric.Group([ image, texto_mensaje ], {
-        left: viewport.width * txt.left,
-        top: viewport.height * txt.top,
-        hasControls: false,
+        left : viewport.width * txt.left,
+        top : viewport.height * txt.top,
+        hasControls : false,
         hasBorders : false,
         hoverCursor : 'pointer',
-        name:txt.nombre,
-        objeto:tablero.objeto,
-        selectable: tablero.selectable,
-        conjunto:tablero.conjunto
+        name : txt.nombre,
+        objeto : tablero.objeto,
+        selectable : tablero.selectable,
+        conjunto : tablero.conjunto
       });
       canvas.add(caja);
       //return caja;
@@ -280,53 +284,22 @@
     last_posR.left = rueda_personaje.getLeft();
     last_posR.top = rueda_personaje.getTop();
 		switch (pos) {
-			case 'up':
-	    	personaje.set({top:last_posP.top-10});
-	    	rueda_personaje.set({top:last_posR.top-10});
+			case 'up' :
+	    	personaje.set({top : last_posP.top-salto});
+	    	rueda_personaje.set({top : last_posR.top-salto});
 				break;
-			case 'down':
-	    	personaje.set({top:last_posP.top+10});
-	    	rueda_personaje.set({top:last_posR.top+10});
+			case 'down' :
+	    	personaje.set({top : last_posP.top+salto});
+	    	rueda_personaje.set({top : last_posR.top+salto});
 				break;
-			case 'left':
-	    	personaje.set({left:last_posP.left-10});
-	    	rueda_personaje.set({left:last_posR.left-10});
+			case 'left' :
+	    	personaje.set({left : last_posP.left-salto});
+	    	rueda_personaje.set({left : last_posR.left-salto});
 				break;
-			case 'right':
-	    	personaje.set({left:last_posP.left+10});
-	    	rueda_personaje.set({left:last_posR.left+10});
+			case 'right' :
+	    	personaje.set({left : last_posP.left+salto});
+	    	rueda_personaje.set({left : last_posR.left+salto});
 				break;
-			default:
-		}
-    canvas.renderAll();
-		rueda_personaje.setCoords();
-		calificar(rueda_personaje);
-	}
-
-	function changePositionTeclado(pos){
-		if(pausado)return;
-    last_posP.left = personaje.getLeft();
-    last_posP.top = personaje.getTop();
-    last_posR.left = rueda_personaje.getLeft();
-    last_posR.top = rueda_personaje.getTop();
-		switch (pos) {
-			case 'up':
-	    	personaje.set({top:last_posP.top-20});
-	    	rueda_personaje.set({top:last_posR.top-20});
-				break;
-			case 'down':
-	    	personaje.set({top:last_posP.top+20});
-	    	rueda_personaje.set({top:last_posR.top+20});
-				break;
-			case 'left':
-	    	personaje.set({left:last_posP.left-20});
-	    	rueda_personaje.set({left:last_posR.left-20});
-				break;
-			case 'right':
-	    	personaje.set({left:last_posP.left+20});
-	    	rueda_personaje.set({left:last_posR.left+20});
-				break;
-			default:
 		}
     canvas.renderAll();
 		rueda_personaje.setCoords();
@@ -360,37 +333,37 @@
     canvas.selection = false;
 
     canvas.on('mouse:down', function(e){
-			console.log(e.target);
+			//console.log(e.target);
 			if(e.target)
 				selected(e, 1);
 		});
 
     canvas.setBackgroundImage(fondo, canvas.renderAll.bind(canvas), {
-      name:'fondo',
-      originX: 'left',
-      originY: 'top',
-      left: 0,
-      top: 0,
-      width: viewport.width,
-      height: viewport.height,
-      name: 'background',
-      objeto: false
+      name : 'fondo',
+      originX : 'left',
+      originY : 'top',
+      left : 0,
+      top : 0,
+      width : viewport.width,
+      height : viewport.height,
+      name : 'background',
+      objeto : false
     });
 
     window.addEventListener("keydown", doKeyDown, false);
     function doKeyDown(e) {
         document.onkeydown = function(e) {
             switch (e.keyCode) {
-              case 38:  /* Up arrow was pressed */
+              case 38 : /* Up arrow was pressed */
 									 changePosition('up');
                 break;
-              case 40:  /* Down arrow was pressed */
+              case 40 : /* Down arrow was pressed */
 									 changePosition('down');
                 break;
-              case 37:  /* Left arrow was pressed */
+              case 37 : /* Left arrow was pressed */
 									changePosition('left');
                 break;
-              case 39:  /* Right arrow was pressed */
+              case 39 : /* Right arrow was pressed */
 									changePosition('right');
                 break;
             }
@@ -404,8 +377,8 @@
 	function check_position(){
 		console.log('check_position');
 		rueda_personaje.set({
-			top:personaje.top+rueda_personaje_pos.top,
-			left:personaje.left+rueda_personaje_pos.left,
+			top : personaje.top+rueda_personaje_pos.top,
+			left : personaje.left+rueda_personaje_pos.left,
 		});
 		rueda_personaje.setCoords();
 		calificar(rueda_personaje);

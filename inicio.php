@@ -3,9 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<title></title>
-	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="js/jquery-1.12.4.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/funciones.js"></script>
 </head>
 <body>
 	<div class="wizard tab-content" style="position:relative;">
@@ -16,10 +17,8 @@
 				</div>
 			</div>
 			<div class="row"  style="position:absolute; bottom:0;width:100%;padding:0 0 0 15px;">
-				<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-					<a href="#step-2" data-toggle="tab">
-						<img class="responsive" src="images/inicio_boton.png" alt="inicio">
-					</a>
+				<div onclick="carga_pagina('temas.php');" class="col-md-12 col-sm-12 col-xs-12 text-center ">
+						<img class="responsive button" src="images/inicio_boton.png" alt="inicio">
 				</div>
 			</div>
 		</div>
@@ -27,11 +26,18 @@
 	</div>
 </body>
 </html>
+
 <style media="screen">
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 
 .wizard{
 	min-height:90%;
+}
+.button:hover{
+	border-color: #fff;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
 }
 body, html {
 	height: 100%;

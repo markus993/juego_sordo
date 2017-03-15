@@ -1,10 +1,19 @@
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.1/fabric.min.js"></script>
+<script src="js/alertify.min.js"></script>
+<link href="css/alertify.min.css" rel="stylesheet">
+<script src="js/jquery-1.12.4.min.js"></script>
+<script src="js/base64.js"></script>
+<script src="js/fabric.min.js"></script>
 <script src="js/nivel2.js"></script>
+<script src="js/funciones.js"></script>
 <body onload='init()'>
 	<canvas class="" id="canvas" width="640px" height="360px"></canvas>
 </body>
 <script>
+	var juego = readCookie('juego');
+	if (juego == null) {
+		juego = nuevo_juego(2);
+		createCookie('juego', juego, 1)
+	}
 	var nivel = 1;
 	var intentos = 5;
 	var objetos = [];
@@ -23,6 +32,7 @@
 	var puntajes = { nombre: 'puntajes', url: 'images/tablero2.png', objeto: false, left: (14/18), top: (1/8), selectable: false, scale: 2, scaleX: 1.5,scaleY: 1};
 	var label 	= { nombre: 'label', url: 'images/label2-1.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
 	var meta 	= { nombre: 'meta', url: 'images/meta.png', objeto: false,  left:(45/50), top:(36/40), selectable: false, scale: 0.8 };
+	var menu = { nombre: 'Menu', url: 'images/menu.png', objeto: false, left: (23/50), top: (7/50), conjunto: false, selectable: false, scale: 0.4};
 
 	var teclado_pos 	= { nombre: 'teclado', left:(2/50), top:(26/40) };
 	var up 	= { nombre: 'up', url: 'images/up.png', objeto: false,  left:(50), top:(0), selectable: false, scale: 0.5 };
@@ -57,6 +67,7 @@
 	objetos.push(label);
 	objetos.push(puntajes);
 	objetos.push(meta);
+	objetos.push(menu);
 	objetos.push(personaje);
 
 	teclado.push(up);

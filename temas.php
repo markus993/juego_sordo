@@ -3,37 +3,48 @@
 <head>
 	<meta charset="utf-8">
 	<title></title>
-	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="js/jquery-1.12.4.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/funciones.js"></script>
 </head>
 <body>
-	<div class="wizard tab-content" style="position:relative;">
+	<div class="wizard tab-content container-full" style="position:relative;">
 		<!--Step 1 -->
 		<div id="step-1" class="tab-pane fade in active">
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-12">&nbsp;
 				</div>
 			</div>
-			<div class="row"  style="position:absolute; bottom:0;width:100%;padding:0 0 0 15px;">
-				<div class="col-md-4 col-sm-4 col-xs-4 text-center">
-					<a href="#step-2" data-toggle="tab">
-						<img class="responsive tab" src="images/tab.png" alt="inicio">
-						<img class="responsive" src="images/clasificacion_icono2.png" alt="inicio">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-1 col-sm-1 col-xs-1"></div>
+					<div class="col-md-2 col-sm-2 col-xs-2 well">
+						<div class="col-md-12 col-sm-12 col-xs-12 hover-glass">
+							<a href="#" onclick="salir_login();" >
+								<img class="img-responsive" src="images/salir.png" alt="inicio">
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="position:absolute; bottom:0;width:100%;padding:0 0 0 15px;">
+				<div id="clasificacion-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass">
+					<a href="#" onclick="carga_pagina('nivel1-1.php');" data-toggle="tab">
+						<img class="img-responsive tab" src="images/tab1.png" alt="inicio">
+						<img class="img-responsive" src="images/clasificacion_icono2.png" alt="inicio">
 					</a>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 text-center">
-					<a href="#step-2" data-toggle="tab">
-						<img class="responsive tab" src="images/tab.png" alt="inicio">
-						<img class="responsive" src="images/orientacion_icono2.png" alt="inicio">
+				<div id="orientacion-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass">
+					<a href="#" onclick="carga_pagina('nivel2-1.php');" data-toggle="tab">
+						<img class="img-responsive tab" src="images/tab2.png" alt="inicio">
+						<img class="img-responsive" src="images/orientacion_icono2.png" alt="inicio">
 					</a>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-4 text-center">
-					<a href="#step-2" data-toggle="tab">
-						<img class="responsive tab" src="images/tab.png" alt="inicio">
-						<img class="responsive" src="images/cantidades_icono2.png" alt="inicio">
+					<a href="#" onclick="carga_pagina('nivel3-1.php');" data-toggle="tab"  id="cantidades-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass" style="text-align:center;">
+						<img class="img-responsive tab" src="images/tab3.png" alt="inicio">
+						<img class="img-responsive" src="images/cantidades_icono2.png" alt="inicio">
 					</a>
-				</div>
 			</div>
 		</div>
 		<!--/Step 1 -->
@@ -42,11 +53,29 @@
 </html>
 <style media="screen">
 @import url(http://fonts.googleapis.com/css?family=Roboto);
-
+img{
+	margin: 0 auto;
+}
+.hover-glass:hover{
+	background-color: rgba(255, 255, 255, 0.3);
+	border: 5px solid rgba(0, 0, 0, 0.3);
+}
+.hover-glass{
+	background-color: rgba(255, 255, 255, 0);
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+  -moz-border-radius: 10%;
+  -webkit-border-radius: 10%;
+  border-radius: 10%;
+	border: 5px solid rgba(0, 0, 0, 0);
+}
 .wizard{
 	min-height:95%;
 }.tab{
 	margin-bottom: -10px;
+	right: 8px;
+	position: relative;
 }
 col-md-4{
 	vertical-align: bottom;
