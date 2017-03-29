@@ -1,3 +1,5 @@
+<title>Phonak-Matik</title>
+<link rel="icon" href="favicon.ico">
 <script src="js/alertify.min.js"></script>
 <link href="css/alertify.min.css" rel="stylesheet">
 <script src="js/jquery-1.12.4.min.js"></script>
@@ -12,7 +14,7 @@
 	var juego = readCookie('juego');
 	var nivel = 2;
 	var intentos = 5;
-	var escala = 0.5;
+	var escala = 0.7;
 	var objetos = [];
 	var rects = [];
 	var teclado = [];
@@ -28,10 +30,13 @@
 	var tablero = { nombre: 'tablero', url: 'images/tablero3.png', objeto: false, left: (1/2), top: (1/2), selectable: false, scale: 2 };
 	var puntajes = { nombre: 'puntajes', url: 'images/tablero3.png', objeto: false, left: (14/18), top: (1/8), selectable: false, scale: 2, scaleX: 1.5,scaleY: 1};
 	var label = { nombre: 'label', url: 'images/label3-2.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
-	var repetir = { nombre: 'cabano', url: 'images/cabano.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 1 };
+	var repetir = { nombre: 'cabano', url: 'images/cabano.png', objeto: false, left: (4/20), top: (3/20), selectable: false, scale: 2 };
 	var mas = { nombre: 'mas', url: 'images/mas.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: escala };
 	var menos = { nombre: 'menos', url: 'images/menos.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: escala };
 	var menu = { nombre: 'Menu', url: 'images/menu.png', objeto: false, left: (23/50), top: (7/50), conjunto: false, selectable: false, scale: 0.4};
+
+	var negativo	= { nombre: 'negativo', url: 'images/sad.png', objeto: false,  left: (9/18), top: (4/8), selectable: false, scale: 2 };
+	var positivo 	= { nombre: 'positivo', url: 'images/happy.png', objeto: false,  left: (9/18), top: (4/8), selectable: false, scale: 2 };
 
 	var punto_negativo_1 	= { nombre: 'punto_negativo_1', url: 'images/sad.png', objeto: false,  left: (12/18), top: (1/8), selectable: false, scale: 1 };
 	var punto_negativo_2 	= { nombre: 'punto_negativo_2', url: 'images/sad.png', objeto: false,  left: (13/18), top: (1/8), selectable: false, scale: 1 };

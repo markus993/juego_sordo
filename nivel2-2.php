@@ -1,3 +1,5 @@
+<title>Phonak-Matik</title>
+<link rel="icon" href="favicon.ico">
 <script src="js/alertify.min.js"></script>
 <link href="css/alertify.min.css" rel="stylesheet">
 <script src="js/jquery-1.12.4.min.js"></script>
@@ -8,7 +10,7 @@
 	<canvas class="" id="canvas" width="640px" height="360px"></canvas>
 </body>
 <script>
-	var session = readCookie('session');
+	var juego = readCookie('juego');
 	var nivel = 2;
 	var intentos = 5;
 	var objetos = [];

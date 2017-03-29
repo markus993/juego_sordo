@@ -1,3 +1,5 @@
+<title>Phonak-Matik</title>
+<link rel="icon" href="favicon.ico">
 <script src="js/alertify.min.js"></script>
 <link href="css/alertify.min.css" rel="stylesheet">
 <script src="js/jquery-1.12.4.min.js"></script>
@@ -36,6 +38,9 @@
 	var mas = { nombre: 'mas', url: 'images/mas.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: 1 };
 	var menos = { nombre: 'menos', url: 'images/menos.png', objeto: false, left: (12/20), top: (9/20), selectable: false, scale: 1 };
 	var menu = { nombre: 'Menu', url: 'images/menu.png', objeto: false, left: (23/50), top: (7/50), conjunto: false, selectable: false, scale: 0.4};
+
+	var negativo	= { nombre: 'negativo', url: 'images/sad.png', objeto: false,  left: (9/18), top: (4/8), selectable: false, scale: 2 };
+	var positivo 	= { nombre: 'positivo', url: 'images/happy.png', objeto: false,  left: (9/18), top: (4/8), selectable: false, scale: 2 };
 
 	var punto_negativo_1 	= { nombre: 'punto_negativo_1', url: 'images/sad.png', objeto: false,  left: (12/18), top: (1/8), selectable: false, scale: 1 };
 	var punto_negativo_2 	= { nombre: 'punto_negativo_2', url: 'images/sad.png', objeto: false,  left: (13/18), top: (1/8), selectable: false, scale: 1 };

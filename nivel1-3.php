@@ -1,3 +1,5 @@
+<title>Phonak-Matik</title>
+<link rel="icon" href="favicon.ico">
 <script src="js/alertify.min.js"></script>
 <link href="css/alertify.min.css" rel="stylesheet">
 <script src="js/jquery-1.12.4.min.js"></script>

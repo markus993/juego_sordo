@@ -125,7 +125,7 @@
 					if(obj.name == 'meta'){
 						console.log(data);
 						envia_punto(juego,2, nivel, 5-intentos, true);
-						envia_resultado(juego,1,nivel)
+						envia_resultado(juego,1,nivel);
 						mostrar_menu('meta');
 						pausado = true;
 						menu = true;
@@ -176,6 +176,7 @@
 				salir_menu();
 				break;
 			case 'Salir' :
+	      eraseCookie('juego');
 				carga_pagina('temas.php');
 				break;
 			case 'Repetir' :

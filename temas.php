@@ -2,7 +2,8 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title></title>
+	<title>Phonak-Matik</title>
+	<link rel="icon" href="favicon.ico">
 	<script src="js/jquery-1.12.4.min.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<script src="js/bootstrap.min.js"></script>

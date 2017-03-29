@@ -6,6 +6,7 @@
 	var negativos = 0;
 	var pausado = false;
 	var menu = false;
+	var max = 10;
 	var data = {
 			punto1 : '',
 			punto2 : '',
@@ -123,6 +124,7 @@
 				return;
 				break;
 			case 'Salir':
+	      eraseCookie('juego');
 				carga_pagina('temas.php');
 				return;
 				break;
@@ -131,7 +133,7 @@
 				return;
 				break;
 			case 'Siguiente':
-				carga_pagina('nivel3-'+(juego+1)+'.php');
+				carga_pagina('nivel3-'+(nivel+1)+'.php');
 				return;
 				break;
 		}
@@ -140,23 +142,15 @@
 			case 'mas':
 				if(e.target.conjunto == 1){
 					if(numero1 > numero2){
-						console.log('positivo1+');
-						positivos++;
 						data_process(1,data);
 					}else{
-						console.log('negativo1+');
-						negativos++;
 						data_process(0,data);
 					}
 				}
 				if(e.target.conjunto == 2){
 					if(numero1 < numero2){
-						console.log('positivo2+');
-						positivos++;
 						data_process(1,data);
 					}else{
-						console.log('negativo2+');
-						negativos++;
 						data_process(0,data);
 					}
 				}
@@ -164,23 +158,15 @@
 			case 'menos':
 				if(e.target.conjunto == 1){
 					if(numero1 < numero2){
-						console.log('positivo1-');
-						positivos++;
 						data_process(1,data);
 					}else{
-						console.log('negativo1-');
-						negativos++;
 						data_process(0,data);
 					}
 				}
 				if(e.target.conjunto == 2){
 					if(numero1 > numero2){
-						console.log('positivo2-');
-						positivos++;
 						data_process(1,data);
 					}else{
-						console.log('negativo2-');
-						negativos++;
 						data_process(0,data);
 					}
 				}
@@ -196,7 +182,7 @@
 			if(data[index]=='' && asignado == false){
 				data[index] = punto;
 				asignado = true;
-				envia_punto(3, juego, index, punto);
+				envia_punto(juego,3, nivel, index.match(/\d+/)[0], punto);
 				if(punto == 1){
 					pos++;
 				}else {
@@ -213,13 +199,44 @@
 				}
 			}
 		});
+		positivos = pos;
+		negativos = neg;
 		console.log('positivos: '+pos);
 		console.log('negativos: '+neg);
 		if(pos+neg == 5){
+			if(punto==1){
+				load_object(punto_positivo_5);
+			}else {
+				load_object(punto_negativo_5);
+			}
+			canvas.renderAll();
 			mostrar_menu();
 		}else{
-			recargar_juego(data);
+			mostrar_calificacion(punto);
+			setTimeout(function(){ recargar_juego(data); }, 500);
+
 		}
+	}
+
+	function mostrar_calificacion(punto){
+		var rect = new fabric.Rect({
+			fill: 'black',
+			opacity: 0.4,
+			originX: 'left',
+			originY: 'top',
+			left: 0,
+			top: 0,
+			selectable:false,
+			width: viewport.width,
+			height: viewport.height,
+		});
+		canvas.add(rect);
+		if(punto==1){
+			load_object(positivo);
+		}else {
+			load_object(negativo);
+		}
+		canvas.renderAll();
 	}
 
 	function mostrar_menu(evento){
@@ -238,13 +255,14 @@
 		mensaje_caja(repetir_txt);
 		mensaje_caja(salir_txt);
 		if(positivos > negativos){
-			envia_resultado(juego,1);
+			envia_resultado(juego,1,nivel);
 			mensaje_caja(ganaste_txt);
 		}else {
-			envia_resultado(juego,0);
+			envia_resultado(juego,0,nivel);
 			mensaje_caja(perdiste_txt);
 		}
-		if(juego !=3)
+		console.log(nivel);
+		if(nivel!=3)
 			mensaje_caja(siguiente_txt);
 	}
 

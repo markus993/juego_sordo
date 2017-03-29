@@ -9,10 +9,6 @@
 	var negativos_1 = 0;
 	var negativos_2 = 0;
 
-  function recargar(){
-    location.reload();
-  }
-
   function load_object(obj){
     fabric.Image.fromURL(obj.url, function(image) {
       image = new_image(image,obj);

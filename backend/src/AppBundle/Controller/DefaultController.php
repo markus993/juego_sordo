@@ -140,7 +140,7 @@ class DefaultController extends Controller
     public function pointAction(Request $request)
     {
       $data = $request->request->all();
-      return new JsonResponse(array('response' => $this->user_point($data['juego'],$data['juego'],$data['nivel'],$data['intento'],$data['punto'],$data['token'])));
+      return new JsonResponse(array('response' => $this->user_point($data['juego'],$data['tipo_juego'],$data['nivel'],$data['intento'],$data['punto'],$data['token'])));
     }
     /**
      *  @Route(
