@@ -47,15 +47,21 @@ function login(){
   $('#loading').show();
 	$.ajax({
 	  type: "POST",
-	  url: '/tesis/backend/web/app_dev.php/login_user',
+	  url: 'backend/web/app_dev.php/login_user',
 	  data: {
 			user : user,
 			pass : password,
 		},
 	  success: function(data){
 			if(data.response){
-        createCookie('token', data.response, 1);
-        carga_pagina('/tesis/inicio.php');
+        console.log(data);
+        createCookie('token', data.response.token, 1);
+        if(data.response.admin == 1){
+          createCookie('admin', 1, 1);
+          carga_pagina('panel.php');
+        }else {
+          carga_pagina('inicio.php');
+        }
 			}else{
         $('#loading').hide();
         alertify.error('Usuario o Contraseña incorrecta');
@@ -64,10 +70,144 @@ function login(){
 	});
 }
 
+function eliminaUsuario(id,nombre) {
+  alertify.confirm('Confirmacion', 'Desea eliminar el usuario '+nombre+' ?',
+    function(){
+      if (eliminarUsuario(id)) {
+        alertify.success('Usuario eliminado');
+        consultaListaUsuarios();
+      }else {
+        alertify.warning('Error');
+      }
+    },
+    function(){}
+  ).set('labels', {ok:'Si', cancel:'No'});
+}
+
+function guardaUsuario() {
+  name = $('#name').val();
+  last = $('#last').val();
+  user = $('#user').val();
+  mail = $('#mail').val();
+  sexo = $('#sexo').val();
+  if (name == '' ||last == '' ||user == '' ||mail == '') {
+    alertify.warning('Faltan datos');
+    return false;
+  }
+  if(!validateEmail(mail)) {
+    alertify.warning('Email no valido');
+    return false;
+  }
+  $("#loading").addClass('visible');
+  $("#loading").removeClass('invisible');
+  if (crearUsuario(name,last,mail,sexo,user)) {
+    $("#loading").addClass('invisible');
+    $("#loading").removeClass('visible');
+    createUserModalClose();
+    consultaListaUsuarios();
+    alertify.success('Usuario creado');
+  }
+}
+
+function guardaUsuarioEditado() {
+  id = $('#idEdit').val();
+  name = $('#nameEdit').val();
+  last = $('#lastEdit').val();
+  user = $('#userEdit').val();
+  mail = $('#mailEdit').val();
+  sexo = $('#sexoEdit').val();
+  if (name == '' ||last == '' ||user == '' ||mail == '') {
+    alertify.warning('Faltan datos');
+    return false;
+  }
+  if(!validateEmail(mail)) {
+    alertify.warning('Email no valido');
+    return false;
+  }
+  $("#loadingEdit").addClass('visible');
+  $("#loadingEdit").removeClass('invisible');
+  if (editarUsuario(id,name,last,mail,sexo,user)) {
+    $("#loadingEdit").addClass('invisible');
+    $("#loadingEdit").removeClass('visible');
+    editUserModalClose();
+    consultaListaUsuarios();
+    alertify.success('Usuario guardado');
+  }
+}
+
+function editarUsuario() {
+  return $.ajax({
+    type: "POST",
+    async: false,
+    url: 'backend/web/app_dev.php/update_user',
+    data: {
+      id : id,
+      name : name,
+      last : last,
+      mail : mail,
+      sexo : sexo,
+      user : user,
+			token : readCookie('token'),
+    },
+    success: function(data){
+      return true;
+    }
+  }).responseText;
+}
+
+function crearUsuario() {
+  return $.ajax({
+    type: "POST",
+    async: false,
+    url: 'backend/web/app_dev.php/create_user',
+    data: {
+      name : name,
+      last : last,
+      mail : mail,
+      sexo : sexo,
+      user : user,
+			token : readCookie('token'),
+    },
+    success: function(data){
+      return true;
+    }
+  }).responseText;
+}
+
+function infoUsuario(id) {
+  return $.ajax({
+    type: "POST",
+    async: false,
+    url: 'backend/web/app_dev.php/info_user',
+    data: {
+      id : id,
+			token : readCookie('token'),
+    },
+    success: function(data){
+      return data.response;
+    }
+  }).responseJSON.response;
+}
+
+function eliminarUsuario(id) {
+  return $.ajax({
+    type: "POST",
+    async: false,
+    url: 'backend/web/app_dev.php/delete_user',
+    data: {
+      id : id,
+			token : readCookie('token'),
+    },
+    success: function(data){
+      return data.response;
+    }
+  }).responseText;
+}
+
 function envia_punto(juego,tipo_juego, nivel, intento, punto){
 	$.ajax({
 	  type: "POST",
-	  url: '/tesis/backend/web/app_dev.php/user_point',
+	  url: 'backend/web/app_dev.php/user_point',
 	  data: {
 			juego : juego,
 			tipo_juego : tipo_juego,
@@ -81,11 +221,10 @@ function envia_punto(juego,tipo_juego, nivel, intento, punto){
 	});
 }
 
-
 function envia_resultado(juego,resultado,nivel){
 	$.ajax({
 	  type: "POST",
-	  url: '/tesis/backend/web/app_dev.php/user_result',
+	  url: 'backend/web/app_dev.php/user_result',
 	  data: {
 			juego : juego,
 			nivel : nivel,
@@ -100,7 +239,7 @@ function envia_resultado(juego,resultado,nivel){
 function nuevo_juego(juego){
   return $.ajax({
     type: "POST",
-    url: '/tesis/backend/web/app_dev.php/user_new_game',
+    url: 'backend/web/app_dev.php/user_new_game',
     async: false,
     data: {
       juego : juego,
@@ -115,6 +254,7 @@ function nuevo_juego(juego){
 function salir_login(){
   eraseCookie('token');
   eraseCookie('juego');
+  eraseCookie('admin');
   carga_pagina('index.php');
 }
 
@@ -125,5 +265,14 @@ function salir_menu() {
       carga_pagina('temas.php');
     },
     function(){}
-    ).set('labels', {ok:'Si', cancel:'No'});
+  ).set('labels', {ok:'Si', cancel:'No'});
+}
+
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+function load(id) {
+  alertify.success('Usuario: '+id);
 }
