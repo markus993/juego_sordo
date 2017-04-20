@@ -55,6 +55,12 @@
 	var perdiste_txt = { nombre:'Perdiste', left:(1/2), top:(1/4), fontSize:60, shadow:'rgba(0,0,0,0.3) 5px 5px 5px', fontWeight:'bold', fontStyle:'italic' };
 	var repetir_txt = { nombre:'Repetir', left:(4/8), top:(6/8), fontSize:60, shadow:'rgba(0,0,0,0.3) 5px 5px 5px', fontWeight:'bold', fontStyle:'italic' };
 
+	var siguiente_icono = { nombre:'Siguiente',url: 'images/next.png', objeto: false, left:(7/8), top:(6/8), fontSize:60, selectable: true, scale: 0.8 };
+	var salir_icono= { nombre:'Salir',url: 'images/menu.png', objeto: false, left:(1/8), top:(6/8), fontSize:60, selectable: true, scale: 0.9 };
+	var ganaste_icono = { nombre:'Ganaste',url: 'images/happy.png', objeto: false, left:(1/2), top:(1/4), fontSize:60, selectable: true, scale: 3 };
+	var perdiste_icono = { nombre:'Perdiste',url: 'images/sad.png', objeto: false, left:(1/2), top:(1/4), fontSize:60, selectable: true, scale: 3 };
+	var repetir_icono = { nombre:'Repetir',url: 'images/reload.png', objeto: false, left:(4/8), top:(6/8), fontSize:60, selectable: true, scale: 0.7 };
+
 	var rect1 = { nombre:'rect1', left:(18/40), top:(37/40), fill:'grey', width:(37/40), height:(4/30), opacity:0.1 };
 	var rect2 = { nombre:'rect2', left:(53/60), top:(25/40), fill:'grey', width:(4/60), height:(15/30), opacity:0.1 };
 	var rect3 = { nombre:'rect3', left:(20/30), top:(20/60), fill:'grey', width:(10/20), height:(3/30), opacity:0.1 };

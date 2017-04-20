@@ -50,6 +50,21 @@ class DefaultController extends Controller
       }
     }
 
+    protected function sendMail($mail,$subject,$messagetxt){
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom('noreply@phonatic.com')
+            ->setTo($mail)
+            ->setBody($messagetxt,'text/html');
+        if ($this->get('mailer')->send($message)) {
+        //if (true) {
+          //var_dump($messagetxt);
+          return true;
+        }else {
+          return false;
+        }
+    }
+
     protected function info_user($token='',$id='') {
       if ($token == '') {
         return false;
@@ -194,8 +209,7 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request){
         return $this->render('default/index.html.twig', array(
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ));
@@ -204,10 +218,39 @@ class DefaultController extends Controller
     /**
      * @Route("/info_user", name="info")
      */
-    public function infoAction(Request $request)
-    {
+    public function infoAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->info_user($data['token'],$data['id'])));
+    }
+
+    /**
+     *  @Route(
+     *    path = "/mail_user_password",
+     *    name ="mail_user_password",
+     *    methods = { "POST" }
+     *  )
+     */
+    public function mail_user_passwordAction(Request $request){
+      $data = $request->request->all();
+      $info =  $this->info_user($data['token'],$data['id']);
+      $messagetxt = "
+      <br>
+      <div>
+        <h1>
+          ".htmlentities('Correo de Informacion de Usuario')."
+        </h1>
+        <p>
+          Nombre: ".htmlentities($info['Nombres'].' '.$info['Apellidos'])."
+        </p>
+        <p>
+          Usuario: ".htmlentities($info['usuario'])."
+        </p>
+        <p>
+          Contraseña: ".base64_decode($info['password'])."
+        </p>
+      </div>
+      ";
+      return new JsonResponse(array('response' => $this->sendMail( $info['mail'],'Correo de Informacion de Contraseña',$messagetxt)));
     }
 
     /**
@@ -217,10 +260,11 @@ class DefaultController extends Controller
      *    methods = { "POST" }
      *  )
      */
-    public function create_userAction(Request $request)
-    {
+    public function create_userAction(Request $request){
       $data = $request->request->all();
-      return new JsonResponse(array('response' => $this->create_user($data['name'],$data['last'],$data['user'],$data['mail'],$data['sexo'])));
+      $out = $this->create_user($data['name'],$data['last'],$data['user'],$data['mail'],$data['sexo']);
+      $this->mail_user_passwordAction($request);
+      return new JsonResponse(array('response' => $out));
     }
 
     /**
@@ -230,8 +274,7 @@ class DefaultController extends Controller
      *    methods = { "POST" }
      *  )
      */
-    public function update_userAction(Request $request)
-    {
+    public function update_userAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->update_user($data['id'],$data['name'],$data['last'],$data['user'],$data['mail'],$data['sexo'])));
     }
@@ -243,8 +286,7 @@ class DefaultController extends Controller
      *    methods = { "POST" }
      *  )
      */
-    public function list_usersAction(Request $request)
-    {
+    public function list_usersAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->list_users($data['token'])));
     }
@@ -256,8 +298,7 @@ class DefaultController extends Controller
      *    methods = { "POST" }
      *  )
      */
-    public function loginAction(Request $request)
-    {
+    public function loginAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->login_user($data['user'],$data['pass'])));
     }
@@ -269,8 +310,7 @@ class DefaultController extends Controller
      *    methods = { "POST" }
      *  )
      */
-    public function delAction(Request $request)
-    {
+    public function delAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->del_user($data['id'])));
     }
@@ -282,8 +322,7 @@ class DefaultController extends Controller
      *    methods = { "POST" }
      *  )
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->new_game($data['juego'],$data['token'])));
     }
@@ -295,8 +334,7 @@ class DefaultController extends Controller
      *    methods = { "POST" }
      *  )
      */
-    public function pointAction(Request $request)
-    {
+    public function pointAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->user_point($data['juego'],$data['tipo_juego'],$data['nivel'],$data['intento'],$data['punto'],$data['token'])));
     }
@@ -308,8 +346,7 @@ class DefaultController extends Controller
      *    methods = { "POST" }
      *  )
      */
-    public function resultAction(Request $request)
-    {
+    public function resultAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->user_result($data['juego'],$data['resultado'],$data['nivel'],$data['token'])));
     }

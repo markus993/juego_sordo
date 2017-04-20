@@ -123,7 +123,7 @@
 				if(e.intersectsWithObject(obj)){
 					colision = true;
 					if(obj.name == 'meta'){
-						console.log(data);
+						//console.log(data);
 						envia_punto(juego,2, nivel, 5-intentos, true);
 						envia_resultado(juego,1,nivel);
 						mostrar_menu('meta');
@@ -220,15 +220,15 @@
 			height : viewport.height,
 		});
 		canvas.add(rect)
-		mensaje_caja(repetir_txt);
-		mensaje_caja(salir_txt);
+		load_object(repetir_icono);
+		load_object(salir_icono);
 		if(evento == 'meta'){
-			mensaje_caja(ganaste_txt);
+			load_object(ganaste_icono);
 		}else {
-			mensaje_caja(perdiste_txt);
+			load_object(perdiste_icono);
 		}
 		if(nivel !=3)
-			mensaje_caja(siguiente_txt);
+			load_object(siguiente_icono);
 	}
 
   function mensaje_caja(txt){
@@ -257,7 +257,7 @@
         hasControls : false,
         hasBorders : false,
         hoverCursor : 'pointer',
-        name : txt.nombre+'_txt',
+        name : txt.nombre+'_icono',
         objeto : false,
         selectable : false,
         conjunto : false

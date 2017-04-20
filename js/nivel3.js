@@ -214,7 +214,6 @@
 		}else{
 			mostrar_calificacion(punto);
 			setTimeout(function(){ recargar_juego(data); }, 500);
-
 		}
 	}
 
@@ -252,18 +251,18 @@
 			height: viewport.height,
 		});
 		canvas.add(rect)
-		mensaje_caja(repetir_txt);
-		mensaje_caja(salir_txt);
+		load_object(repetir_icono);
+		load_object(salir_icono);
 		if(positivos > negativos){
 			envia_resultado(juego,1,nivel);
-			mensaje_caja(ganaste_txt);
+			load_object(ganaste_icono);
 		}else {
 			envia_resultado(juego,0,nivel);
-			mensaje_caja(perdiste_txt);
+			load_object(perdiste_icono);
 		}
 		console.log(nivel);
 		if(nivel!=3)
-			mensaje_caja(siguiente_txt);
+			load_object(siguiente_icono);
 	}
 
   function mensaje_caja(txt){
@@ -292,7 +291,7 @@
         hasControls: false,
         hasBorders : false,
         hoverCursor : 'pointer',
-        name:txt.nombre+'_txt',
+        name:txt.nombre+'_icono',
         objeto:false,
         selectable: false,
         conjunto: false
@@ -449,9 +448,10 @@
 		}
 
 		//numero = tabla_pos2.length;
-		numero2 = getRandomInt(1, max);
-		if(numero1 == numero2)
+		do {
 			numero2 = getRandomInt(1, max);
+		}while (numero1 == numero2)
+		
 		count = 0;
 
 		while (numero2 > count ) {

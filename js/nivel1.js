@@ -267,7 +267,7 @@
 	function mostrar_menu(){
 		var rect = new fabric.Rect({
 			fill: 'black',
-			opacity: 0.4,
+			opacity: 0.8,
 			originX: 'left',
 			originY: 'top',
 			left: 0,
@@ -277,28 +277,28 @@
 			height: viewport.height,
 		});
 		canvas.add(rect)
-		mensaje_caja(repetir_txt);
-		mensaje_caja(salir_txt);
+		load_object(repetir_icono);
+		load_object(salir_icono);
 		if (nivel!=3) {
 			if(positivos>negativos){
 				envia_resultado(juego,1,nivel);
-				mensaje_caja(ganaste_txt);
+				load_object(ganaste_icono);
 			}else {
 				envia_resultado(juego,0,nivel);
-				mensaje_caja(perdiste_txt);
+				load_object(perdiste_icono);
 			}
 		}else {
 			if(positivos_1>negativos_1 && positivos_2>negativos_2){
 				envia_resultado(juego,1,nivel);
-				mensaje_caja(ganaste_txt);
+				load_object(ganaste_icono);
 			}else {
 				envia_resultado(juego,0,nivel);
-				mensaje_caja(perdiste_txt);
+				load_object(perdiste_icono);
 			}
 		}
 
 		if(nivel !=3)
-			mensaje_caja(siguiente_txt);
+			load_object(siguiente_icono);
 	}
 
   function mensaje_caja(txt){
@@ -327,7 +327,7 @@
         hasControls: false,
         hasBorders : false,
         hoverCursor : 'pointer',
-        name:txt.nombre+'_txt',
+        name:txt.nombre+'_icono',
         objeto:false,
         selectable: false,
         conjunto: false
@@ -344,6 +344,29 @@
         conjunto:tablero.conjunto
       });
       canvas.add(caja);
+      //return caja;
+    });
+  }
+
+  function mensaje_icono(txt){
+    fabric.Image.fromURL(txt.url, function(image) {
+      image.set({
+				left: viewport.width * txt.left,
+        top: viewport.height * txt.top,
+        left: 100,
+        top: 50,
+        shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+        hasControls: false,
+        hasBorders : false,
+        hoverCursor : 'pointer',
+        name:txt.nombre,
+        objeto:txt.objeto,
+        selectable: txt.selectable,
+        conjunto:txt.conjunto
+      }).scale(1);
+      texto_mensaje = null;
+
+      canvas.add(image);
       //return caja;
     });
   }

@@ -56,6 +56,12 @@
 	var perdiste_txt = { nombre:'Perdiste', left:(1/2), top:(1/4), fontSize:60, shadow:'rgba(0,0,0,0.3) 5px 5px 5px', fontWeight:'bold', fontStyle:'italic' };
 	var repetir_txt = { nombre:'Repetir', left:(4/8), top:(6/8), fontSize:60, shadow:'rgba(0,0,0,0.3) 5px 5px 5px', fontWeight:'bold', fontStyle:'italic' };
 
+	var siguiente_icono = { nombre:'Siguiente',url: 'images/next.png', objeto: false, left:(7/8), top:(6/8), fontSize:60, selectable: true, scale: 0.8 };
+	var salir_icono= { nombre:'Salir',url: 'images/menu.png', objeto: false, left:(1/8), top:(6/8), fontSize:60, selectable: true, scale: 0.9 };
+	var ganaste_icono = { nombre:'Ganaste',url: 'images/happy.png', objeto: false, left:(1/2), top:(1/4), fontSize:60, selectable: true, scale: 3 };
+	var perdiste_icono = { nombre:'Perdiste',url: 'images/sad.png', objeto: false, left:(1/2), top:(1/4), fontSize:60, selectable: true, scale: 3 };
+	var repetir_icono = { nombre:'Repetir',url: 'images/reload.png', objeto: false, left:(4/8), top:(6/8), fontSize:60, selectable: true, scale: 0.7 };
+
 	var fondo = 'images/fondo3-2.png';
 
 	objetos.push(label);

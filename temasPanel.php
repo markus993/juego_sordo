@@ -13,36 +13,20 @@
 	<div class="wizard tab-content container-full" style="position:relative;">
 		<!--Step 1 -->
 		<div id="step-1" class="tab-pane fade in active">
-			<div class="row">
-				<div class="col-md-12">&nbsp;
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="col-md-1 col-sm-1 col-xs-1"></div>
-					<div class="col-md-2 col-sm-2 col-xs-2 well">
-						<div class="col-md-12 col-sm-12 col-xs-12 hover-glass">
-							<a href="#" onclick="salir_login();" >
-								<img class="img-responsive" src="images/salir.png" alt="inicio">
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div class="row" style="position:absolute; bottom:0;width:100%;padding:0 0 0 15px;">
 				<div id="clasificacion-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass">
-					<a href="#" onclick="carga_pagina('nivel1-1.php');" data-toggle="tab">
+					<a href="#" data-toggle="tab">
 						<img class="img-responsive tab" src="images/tab1.png" alt="inicio">
 						<img class="img-responsive" src="images/clasificacion_icono2.png" alt="inicio">
 					</a>
 				</div>
 				<div id="orientacion-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass">
-					<a href="#" onclick="carga_pagina('nivel2-1.php');" data-toggle="tab">
+					<a href="#" data-toggle="tab">
 						<img class="img-responsive tab" src="images/tab2.png" alt="inicio">
 						<img class="img-responsive" src="images/orientacion_icono2.png" alt="inicio">
 					</a>
 				</div>
-					<a href="#" onclick="carga_pagina('nivel3-1.php');" data-toggle="tab"  id="cantidades-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass" style="text-align:center;">
+					<a href="#" data-toggle="tab"  id="cantidades-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass" style="text-align:center;">
 						<img class="img-responsive tab" src="images/tab3.png" alt="inicio">
 						<img class="img-responsive" src="images/cantidades_icono2.png" alt="inicio">
 					</a>
@@ -56,10 +40,6 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 img{
 	margin: 0 auto;
-}
-.hover-glass:hover{
-	background-color: rgba(255, 255, 255, 0.3);
-	border: 5px solid rgba(0, 0, 0, 0.3);
 }
 .hover-glass{
 	background-color: rgba(255, 255, 255, 0);
@@ -84,7 +64,8 @@ col-md-4{
 body, html {
 	height: 100%;
 	background-repeat: no-repeat;
-	background: url(images/temas.png);
+	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+	background: url(images/fondo-panel.png);
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-repeat: no-repeat;

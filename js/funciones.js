@@ -135,6 +135,31 @@ function guardaUsuarioEditado() {
   }
 }
 
+function sendmail(id) {
+  $.ajax({
+    type: "POST",
+    url: 'backend/web/app_dev.php/mail_user_password',
+    dataType: "json" ,
+    data: {
+      id : id,
+			token : readCookie('token'),
+    },
+    beforeSend: function(data){
+      waitModalOpen();
+    },
+    success: function(data){
+      waitModalClose();
+      if (data.response == true) {
+        alertify.success('Correo Enviado');
+        return true;
+      }else {
+        alertify.error('Correo no pudo ser enviado');
+        return false;
+      }
+    }
+  });
+}
+
 function editarUsuario() {
   return $.ajax({
     type: "POST",
@@ -259,13 +284,15 @@ function salir_login(){
 }
 
 function salir_menu() {
-  alertify.confirm('Salir al Menu', 'Deseas salir al Menu?',
-    function(){
       eraseCookie('juego');
       carga_pagina('temas.php');
-    },
-    function(){}
-  ).set('labels', {ok:'Si', cancel:'No'});
+  // alertify.confirm('Salir al Menu', 'Deseas salir al Menu?',
+  //   function(){
+  //     eraseCookie('juego');
+  //     carga_pagina('temas.php');
+  //   },
+  //   function(){}
+  // ).set('labels', {ok:'Si', cancel:'No'});
 }
 
 function validateEmail(email) {
