@@ -30,28 +30,59 @@
 				</div>
 			</div>
 			<div class="row" style="position:absolute; bottom:0;width:100%;padding:0 0 0 15px;">
-				<div id="clasificacion-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass">
+				<div id="clasificacion-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass" style="position:relative;">
 					<a href="#" onclick="carga_pagina('nivel1-1.php');" data-toggle="tab">
-						<img class="img-responsive tab" src="images/tab1.png" alt="inicio">
+						<img class="img-responsive tab" src="images/tab1.png" style="width: 70%;" alt="inicio">
+						<img class="img-responsive face" id="juego1nivel3" style="height:70px;position:absolute;top:25px;right:27%;opacity:0;" src="images/sad.png" alt="inicio">
+						<img class="img-responsive face" id="juego1nivel2" style="height:70px;position:absolute;top:25px;right:45%;opacity:0;" src="images/sad.png" alt="inicio">
+						<img class="img-responsive face" id="juego1nivel1" style="height:70px;position:absolute;top:25px;right:62%;opacity:0;" src="images/sad.png" alt="inicio">
 						<img class="img-responsive" src="images/clasificacion_icono2.png" alt="inicio">
 					</a>
 				</div>
 				<div id="orientacion-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass">
 					<a href="#" onclick="carga_pagina('nivel2-1.php');" data-toggle="tab">
-						<img class="img-responsive tab" src="images/tab2.png" alt="inicio">
+						<img class="img-responsive tab" src="images/tab2.png" style="width: 70%;" alt="inicio">
+						<img class="img-responsive face" id="juego2nivel3" style="height:70px;position:absolute;top:25px;right:27%;opacity:0;" src="images/sad.png" alt="inicio">
+						<img class="img-responsive face" id="juego2nivel2" style="height:70px;position:absolute;top:25px;right:45%;opacity:0;" src="images/sad.png" alt="inicio">
+						<img class="img-responsive face" id="juego2nivel1" style="height:70px;position:absolute;top:25px;right:62%;opacity:0;" src="images/sad.png" alt="inicio">
 						<img class="img-responsive" src="images/orientacion_icono2.png" alt="inicio">
 					</a>
 				</div>
-					<a href="#" onclick="carga_pagina('nivel3-1.php');" data-toggle="tab"  id="cantidades-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass" style="text-align:center;">
-						<img class="img-responsive tab" src="images/tab3.png" alt="inicio">
+				<div id="cantidades-glass" class="col-md-4 col-sm-4 col-xs-4 text-center hover-glass">
+					<a href="#" onclick="carga_pagina('nivel3-1.php');" data-toggle="tab">
+						<img class="img-responsive tab" src="images/tab3.png" style="width: 70%;" alt="inicio">
+						<img class="img-responsive face" id="juego3nivel3" style="height:70px;position:absolute;top:25px;right:27%;opacity:0;" src="images/sad.png" alt="inicio">
+						<img class="img-responsive face" id="juego3nivel2" style="height:70px;position:absolute;top:25px;right:45%;opacity:0;" src="images/sad.png" alt="inicio">
+						<img class="img-responsive face" id="juego3nivel1" style="height:70px;position:absolute;top:25px;right:62%;opacity:0;" src="images/sad.png" alt="inicio">
 						<img class="img-responsive" src="images/cantidades_icono2.png" alt="inicio">
 					</a>
+				</div>
 			</div>
 		</div>
 		<!--/Step 1 -->
 	</div>
 </body>
 </html>
+<script type="text/javascript">
+
+	$.ajax({
+		type: "POST",
+		url: 'backend/web/app_dev.php/user_games_win',
+		data: {
+			id_user : readCookie('id_user'),
+			token : readCookie('token'),
+		},
+		success: function(data){
+			for (var i = 0; i < data.response.length; i++) {
+				datos = data.response[i];
+				$("#juego"+datos.juego+"nivel"+datos.nivel).attr("src","images/happy.png");
+				console.log(datos);
+			}
+			$('.face').fadeTo( 100, 1 );
+		}
+	});
+
+</script>
 <style media="screen">
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 img{

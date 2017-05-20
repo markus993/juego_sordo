@@ -52,18 +52,25 @@ function login(){
 			user : user,
 			pass : password,
 		},
+	  error: function(data){
+      $('#loading').hide();
+      console.log(data.responseJSON);
+      alertify.error('Servidor no responde adecuadamente');
+		},
 	  success: function(data){
+      $('#loading').hide();
 			if(data.response){
-        console.log(data);
         createCookie('token', data.response.token, 1);
         if(data.response.admin == 1){
+          console.log('carga_admin');
           createCookie('admin', 1, 1);
           carga_pagina('panel.php');
         }else {
+          console.log('carga_pagina');
+          createCookie('id_user', data.response.id_user, 1);
           carga_pagina('inicio.php');
         }
 			}else{
-        $('#loading').hide();
         alertify.error('Usuario o Contraseña incorrecta');
 			}
 		}
@@ -269,6 +276,7 @@ function nuevo_juego(juego){
     data: {
       juego : juego,
       token : readCookie('token'),
+      id_user : readCookie('id_user'),
     },
     success: function(data){
       return data.response;
@@ -280,6 +288,7 @@ function salir_login(){
   eraseCookie('token');
   eraseCookie('juego');
   eraseCookie('admin');
+  eraseCookie('id_user');
   carga_pagina('index.php');
 }
 

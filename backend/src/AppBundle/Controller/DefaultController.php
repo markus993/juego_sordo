@@ -43,6 +43,7 @@ class DefaultController extends Controller
           //var_dump($result);
           $out['token'] = $token;
           $out['admin'] = $result['admin'];
+          $out['id_user'] = $result['id'];
           return $out;
         }else{
           return false;
@@ -108,6 +109,90 @@ class DefaultController extends Controller
       }
     }
 
+    protected function user_games_win($id_user,$token) {
+      if ($token == '') {
+        return false;
+      }
+      $id_user = filter_var($id_user, FILTER_SANITIZE_STRING);
+      $token = filter_var($token, FILTER_SANITIZE_STRING);
+
+      $this->con = $this->conexion();
+      $sql = "SELECT
+                `resultado-juego`.resultado,
+                `resultado-juego`.nivel,
+                juego.juego
+              FROM
+                juego,
+                `resultado-juego`
+              WHERE
+                juego.id_user='$id_user' AND
+                juego.id=`resultado-juego`.id_juego
+              GROUP BY
+                juego.juego";
+      $resultado = mysql_query($sql);
+      if (!$resultado) {
+        $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
+        $mensaje .= 'Consulta completa: ' . $sql;
+        die($mensaje);
+        return false;
+      }else {
+        while($result = mysql_fetch_array($resultado, MYSQL_ASSOC)) {
+          $salida[] = $result;
+        }
+        return $salida;
+      }
+    }
+
+    protected function user_games_result($id_user,$nivel,$token) {
+      if ($token == '') {
+        return false;
+      }
+      $id_user = filter_var($id_user, FILTER_SANITIZE_STRING);
+      $nivel = filter_var($nivel, FILTER_SANITIZE_STRING);
+      $token = filter_var($token, FILTER_SANITIZE_STRING);
+
+      $this->con = $this->conexion();
+      $sql = "SELECT `resultado-juego`.*,juego.juego FROM juego,`resultado-juego` WHERE juego.id_user='$id_user' AND juego.id=`resultado-juego`.id_juego";
+      $resultado = mysql_query($sql);
+      if (!$resultado) {
+        $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
+        $mensaje .= 'Consulta completa: ' . $sql;
+        die($mensaje);
+        return false;
+      }else {
+        while($result = mysql_fetch_array($resultado, MYSQL_ASSOC)) {
+          $salida[] = $result;
+        }
+        return $salida;
+      }
+    }
+
+    protected function user_jugadas_result($id_user,$juego,$token) {
+      if ($token == '') {
+        return false;
+      }
+      $id_user = filter_var($id_user, FILTER_SANITIZE_STRING);
+      $juego = filter_var($juego, FILTER_SANITIZE_STRING);
+      $nivel = filter_var($nivel, FILTER_SANITIZE_STRING);
+      $token = filter_var($token, FILTER_SANITIZE_STRING);
+
+      $this->con = $this->conexion();
+      $sql = "SELECT jugadas.* FROM juego,jugadas WHERE juego.id_user='$id_user' AND juego.id=jugadas.id_juego";
+
+      $resultado = mysql_query($sql);
+      if (!$resultado) {
+        $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
+        $mensaje .= 'Consulta completa: ' . $sql;
+        die($mensaje);
+        return false;
+      }else {
+        while($result = mysql_fetch_array($resultado, MYSQL_ASSOC)) {
+          $salida[] = $result;
+        }
+        return $salida;
+      }
+    }
+
     protected function create_user($name,$last,$user,$mail,$sexo){
       $this->con = $this->conexion();
       $name = filter_var($name, FILTER_SANITIZE_STRING);
@@ -154,7 +239,7 @@ class DefaultController extends Controller
       $nivel = filter_var ( $nivel, FILTER_SANITIZE_STRING);
       $token = filter_var ( $token, FILTER_SANITIZE_STRING);
 
-      $sql = "INSERT INTO `resultado-juego` (`id_juego`, `resultado`) VALUES ('$juego', '$resultado')";
+      $sql = "INSERT INTO `resultado-juego` (`id_juego`, `resultado`, `nivel`) VALUES ('$juego', '$resultado', '$nivel')";
       $resultado = mysql_query($sql);
       if (!$resultado) {
           $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
@@ -192,11 +277,12 @@ class DefaultController extends Controller
       }
     }
 
-    protected function new_game($juego,$token) {
+    protected function new_game($juego,$id_user,$token) {
       $this->con = $this->conexion();
+      $id_user = filter_var ( $id_user, FILTER_SANITIZE_STRING);
       $juego = filter_var ( $juego, FILTER_SANITIZE_STRING);
       $token = filter_var ( $token, FILTER_SANITIZE_STRING);
-      $sql = "INSERT INTO juego (juego, token) VALUES ('$juego', '$token')";
+      $sql = "INSERT INTO juego (juego, token, id_user) VALUES ('$juego', '$token', '$id_user')";
       if (!$resultado = mysql_query($sql)) {
           $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
           $mensaje .= 'Consulta completa: ' . $sql;
@@ -324,7 +410,43 @@ class DefaultController extends Controller
      */
     public function newAction(Request $request){
       $data = $request->request->all();
-      return new JsonResponse(array('response' => $this->new_game($data['juego'],$data['token'])));
+      return new JsonResponse(array('response' => $this->new_game($data['juego'],$data['id_user'],$data['token'])));
+    }
+
+    /**
+     *  @Route(
+     *    path = "/user_games_win",
+     *    name ="user_games_win",
+     *    methods = { "POST" }
+     *  )
+     */
+    public function user_games_winAction(Request $request){
+      $data = $request->request->all();
+      return new JsonResponse(array('response' => $this->user_games_win($data['id_user'],$data['token'])));
+    }
+
+    /**
+     *  @Route(
+     *    path = "/user_games_result",
+     *    name ="user_games_result",
+     *    methods = { "POST" }
+     *  )
+     */
+    public function user_games_resultAction(Request $request){
+      $data = $request->request->all();
+      return new JsonResponse(array('response' => $this->user_games_result($data['id_user'],$data['nivel'],$data['token'])));
+    }
+
+    /**
+     *  @Route(
+     *    path = "/user_jugadas_result",
+     *    name ="user_jugadas_result",
+     *    methods = { "POST" }
+     *  )
+     */
+    public function user_jugadas_resultAction(Request $request){
+      $data = $request->request->all();
+      return new JsonResponse(array('response' => $this->user_jugadas_result($data['id_user'],$data['juego'],$data['nivel'],$data['token'])));
     }
 
     /**
