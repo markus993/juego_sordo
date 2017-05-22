@@ -75,10 +75,14 @@
 		success: function(data){
 			for (var i = 0; i < data.response.length; i++) {
 				datos = data.response[i];
-				$("#juego"+datos.juego+"nivel"+datos.nivel).attr("src","images/happy.png");
-				console.log(datos);
+				//console.log(datos);
+				cursos = "#juego"+datos.juego+"nivel"+datos.nivel;
+				//console.log(cursos);
+				if(datos.resultado==1){
+					$(cursos).attr("src","images/happy.png");
+				}
+				$(cursos).fadeTo( 100, 1 );
 			}
-			$('.face').fadeTo( 100, 1 );
 		}
 	});
 

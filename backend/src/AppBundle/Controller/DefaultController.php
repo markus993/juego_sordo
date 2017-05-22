@@ -118,17 +118,21 @@ class DefaultController extends Controller
 
       $this->con = $this->conexion();
       $sql = "SELECT
-                `resultado-juego`.resultado,
-                `resultado-juego`.nivel,
-                juego.juego
+              	MAX(`resultado-juego`.resultado) as resultado,
+              	CONCAT(juego.juego,',',`resultado-juego`.nivel) AS niveles,
+                juego.juego,
+                `resultado-juego`.nivel
               FROM
-                juego,
-                `resultado-juego`
+              	juego,
+              	`resultado-juego`
               WHERE
-                juego.id_user='$id_user' AND
-                juego.id=`resultado-juego`.id_juego
+              	juego.id_user = '$id_user'
+              AND
+                juego.id = `resultado-juego`.id_juego
               GROUP BY
-                juego.juego";
+              	niveles
+              ORDER BY
+              	juego.juego,`resultado-juego`.nivel";
       $resultado = mysql_query($sql);
       if (!$resultado) {
         $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
@@ -136,6 +140,7 @@ class DefaultController extends Controller
         die($mensaje);
         return false;
       }else {
+        $salida = array();
         while($result = mysql_fetch_array($resultado, MYSQL_ASSOC)) {
           $salida[] = $result;
         }

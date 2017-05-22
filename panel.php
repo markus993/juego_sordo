@@ -402,7 +402,8 @@
 
 	function showUserGraphicStatsModalOpen(id) {
 		$("#showUserGraphicStats").modal('show');
-		$("#Graphicstats").html("<iframe width='300' id='iframeStats' height='500' frameborder='0' src='estadisticas.php' scrolling='no' marginheight='0' marginwidth='0'></iframe>");
+		token =getUrlParameter('token');
+		$("#Graphicstats").html("<iframe width='300' id='iframeStats' height='500' frameborder='0' src='estadisticas.php?token="+token+"&id_user="+id+"' scrolling='no' marginheight='0' marginwidth='0'></iframe>");
 		 rescale('#Graphicstats');
 	}
 
@@ -437,6 +438,21 @@
     $('#sexoEdit').val(info.sexo);
     $("#editUser").modal('show');
 	}
+
+	var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
 
 	function editUserModalClose() {
 		 $("#editUser").modal('hide');
