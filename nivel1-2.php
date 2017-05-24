@@ -94,7 +94,7 @@
 	posXY = posiciones[pos.pop()];
 	var alicate = { nombre: 'alicate', url: 'images/alicate.png', objeto: true, left: (posXY.left), top: (posXY.top), conjunto: 2, selectable: true, scale: 0.5 };
 	posXY = posiciones[pos.pop()];
-	var destornillador = { nombre: 'destornillador', url: 'images/destornillador.png', left: (posXY.left), top: (posXY.top), top: (2/8), conjunto: 2, selectable: true, scale: 0.2 };
+	var destornillador = { nombre: 'destornillador', url: 'images/destornillador.png', objeto: true, left: (posXY.left), top: (posXY.top), top: (2/8), conjunto: 2, selectable: true, scale: 0.2 };
 
 	var maletin 	= { nombre: 'maletin', url: 'images/maletin.png', objeto: false, left: (1/2), top: (10/12), conjunto: 1, selectable: false, scale: 1 };
 
