@@ -14,16 +14,16 @@
 		<!--Step 1 -->
 		<div id="step-1" class="tab-pane fade in active">
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-12 col-xs-12	col-sm-12">
 				</div>
 			</div>
 			<div class="row"  style="position:absolute; bottom:0;width:100%;padding:0 0 0 15px;">
 				<div onclick="carga_pagina('temas.php');" class="col-md-12 col-sm-12 col-xs-12 text-center ">
 						<img class="responsive button" src="images/inicio_boton.png" alt="inicio">
 				</div>
-				<div class="col-md-10">
+				<div class="col-md-10 col-xs-10	col-sm-10">
 				</div>
-				<div class="col-md-2">
+				<div class="col-md-2 col-xs-2	col-sm-2">
 						<img onclick="showInfoModalOpen();" class="img-responsive button" src="images/info_icono.png" alt="inicio">
 				</div>
 			</div>
@@ -38,15 +38,15 @@
 					<h4 class="modal-title">Acerca de Phonak-Matic.com </h4>
 				</div>
 				<div class="modal-body" style="height: 150px;">
-					<div class="col-sm-12">
+					<div class="col-md-12 col-xs-12	col-sm-12">
 						Esta aplicación web es una ayuda didáctica para el aprendizaje de los estudiantes sobre aspectos de las matemáticas.<br>
 						Se espera que sea monitoreada por los docentes y/o padres de los estudiantes.
 					</div>
 				</div>
 				<div class="modal-footer">
-					<div class="col-sm-10">
+					<div class="col-md-10 col-xs-10	col-sm-10">
 					</div>
-					<div class="col-sm-2">
+					<div class="col-md-2 col-xs-2	col-sm-2">
 							<img class="img-responsive" src="images/personaje.png" alt="personaje">
 					</div>
 				</div>

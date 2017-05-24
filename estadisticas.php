@@ -226,7 +226,7 @@
     			<td colspan="<?= $col_texto ?>" class="tabla3-1">
             <img src="images/comentarios.png" style="width:200px;">
             <div contenteditable="true" class="texto">
-              Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original., el cual incluye versiones de Lorem Ipsum.
+              Lorem ipsum dolor sit amet, viverra felis tellus congue donec. In ac euismod justo nec, convallis dictum praesent facilisis turpis vivamus dolor, diam eros conubia fermentum turpis. Nibh ut, massa imperdiet, donec adipisicing eget arcu eleifend. Aenean aenean, at tempor parturient consequat.
             </div>
           </td>
           <?php if ($pdf == false) {
@@ -234,9 +234,8 @@
     			<td colspan="3" class="tabla3-2">
             <div class="div-boton">
                 <img class="botones hover-glass" onclick="open_pdf();" src="images/guardar.png">
-            </div>
-            <div class="div-boton">
-                <img class="botones hover-glass" onclick="send_mail();" src="images/correo.png">
+
+                <img class="botones hover-glass" onclick="//send_mail();" src="images/correo.png">
             </div>
           </td>
           <?php }  ?>

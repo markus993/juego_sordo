@@ -15,16 +15,11 @@
 		<div class="row">
 			<div class="col-md-1 col-sm-1 col-xs-1"></div>
 			<div class="col-md-10 col-sm-10 col-xs-10">
-				<div onclick="//carga_pagina('temas.php');" class="col-md-2 col-sm-2 col-xs-2 text-center button-div">
-					<h1>Juego 1</h1>
+				<div id="juego" onclick="//carga_pagina('temas.php');" class="col-md-2 col-sm-2 col-xs-2 text-center button-div h2">
+					Juego 1
 				</div>
-				<div onclick="//carga_pagina('temas.php');" class="col-md-7 col-sm-7 col-xs-7 text-center button-div">
-					<h1>Nombre Usuario</h1>
-				</div>
-				<div onclick="//carga_pagina('temas.php');" class="col-md-1 col-sm-1 col-xs-1 text-center button-div">
-					<a href="#" onclick="salir_login();" >
-						<img class="img-responsive" src="images/salir.png" alt="inicio">
-					</a>
+				<div id="nombre" onclick="//carga_pagina('temas.php');" class="col-md-7 col-sm-7 col-xs-7 text-center button-div h2">
+					Nombre Usuario
 				</div>
 			</div>
 			<div class="col-md-1 col-sm-1 col-xs-1"></div>
@@ -34,7 +29,7 @@
 		<div class="row">
 			<div class="col-md-1 col-sm-1 col-xs-1"></div>
 			<div class="col-md-10 col-sm-10 col-xs-10">
-				<canvas id="myChart" width="600" height="400"></canvas>
+				<canvas id="myChart" width="600" height="200"></canvas>
 			</div>
 			<div class="col-md-1 col-sm-1 col-xs-1"></div>
 		</div>
@@ -42,6 +37,12 @@
 </body>
 </html>
 <script>
+id = getUrlParameter('id_game');
+name = getUrlParameter('nombre');
+$('#juego').text('Juego: '+id);
+$('#nombre').text('Usuario: '+name);
+console.log(id);
+console.log(name);
 var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
 	type: 'bar',
@@ -91,7 +92,7 @@ var myChart = new Chart(ctx, {
 				}
 			}]
 		},
-		responsive: false,
+		responsive: true,
 		layout:{
 			padding:10
 		}
@@ -103,7 +104,7 @@ var myChart = new Chart(ctx, {
 canvas {
 	background-color: rgba(200, 200, 200, 0.8);
 	width: 100%;
-	height: auto;
+	height: 50%;
 }
 .well_mod{
 	background-color: transparent;
@@ -123,6 +124,10 @@ canvas {
 	min-height:90%;
 	padding:auto;
 }
+iframe {
+	max-width: 100%;
+	height: auto;
+}
 .down{
 	vertical-align: bottom;
 }
@@ -137,7 +142,6 @@ canvas {
 }
 body, html {
 	height: 100%;
-	overflow:hidden;
 	background-repeat: no-repeat;
 	background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
 	background: url(images/fondo-panel.png);
