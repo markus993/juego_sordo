@@ -109,6 +109,48 @@ class DefaultController extends Controller
       }
     }
 
+    protected function user_games_points($id_user,$token) {
+      if ($token == '') {
+        return false;
+      }
+      $id_user = filter_var($id_user, FILTER_SANITIZE_STRING);
+      $token = filter_var($token, FILTER_SANITIZE_STRING);
+
+      $this->con = $this->conexion();
+      $sql = "SELECT
+              	SUM(IF(jugadas.punto=1, 1, 0)) AS positivos,
+              	SUM(IF(jugadas.punto=0, 1, 0)) AS negativos,
+              	CONCAT(juego.juego,',',`resultado-juego`.nivel) AS niveles,
+              	juego.juego,
+              	`resultado-juego`.nivel
+              FROM
+              	juego,
+              	jugadas,
+              	`resultado-juego`
+              WHERE
+              	juego.id_user = '$id_user'
+              AND juego.id = `resultado-juego`.id_juego
+              AND juego.id = jugadas.id_juego
+              GROUP BY
+              	niveles
+              ORDER BY
+              	juego.juego,
+              	`resultado-juego`.nivel";
+      $resultado = mysql_query($sql);
+      if (!$resultado) {
+        $mensaje  = 'Consulta no válida: ' . mysql_error() . "\n";
+        $mensaje .= 'Consulta completa: ' . $sql;
+        die($mensaje);
+        return false;
+      }else {
+        $salida = array();
+        while($result = mysql_fetch_array($resultado, MYSQL_ASSOC)) {
+          $salida[] = $result;
+        }
+        return $salida;
+      }
+    }
+
     protected function user_games_win($id_user,$token) {
       if ($token == '') {
         return false;
@@ -408,6 +450,18 @@ class DefaultController extends Controller
     public function newAction(Request $request){
       $data = $request->request->all();
       return new JsonResponse(array('response' => $this->new_game($data['juego'],$data['id_user'],$data['token'])));
+    }
+
+    /**
+     *  @Route(
+     *    path = "/user_games_points",
+     *    name ="user_games_points",
+     *    methods = { "POST" }
+     *  )
+     */
+    public function user_games_pointsAction(Request $request){
+      $data = $request->request->all();
+      return new JsonResponse(array('response' => $this->user_games_points($data['id_user'],$data['token'])));
     }
 
     /**

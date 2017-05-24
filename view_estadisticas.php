@@ -37,67 +37,113 @@
 </body>
 </html>
 <script>
-id = getUrlParameter('id_game');
-name = getUrlParameter('nombre');
-$('#juego').text('Juego: '+id);
-$('#nombre').text('Usuario: '+name);
-console.log(id);
-console.log(name);
-var ctx = document.getElementById("myChart");
-var myChart = new Chart(ctx, {
-	type: 'bar',
-	data: {
-		labels: ["Nivel 1", "Nivel 2", "Nivel 3"],
-		datasets: [
-			{
-				label: 'Puntos Positivos',
-				data: [3, 1, 13 ],
-				backgroundColor: [
-					'rgba(54, 162, 235, 0.2)', //AZUL
-					'rgba(54, 162, 235, 0.2)', //AZUL
-					'rgba(54, 162, 235, 0.2)' //AZUL
-				],
-				borderColor: [
-					'rgba(54, 162, 235, 1)', //AZUL
-					'rgba(54, 162, 235, 1)', //AZUL
-					'rgba(54, 162, 235, 1)' //AZUL
-				],
-				borderWidth: 1
-			},
-			{
-				label: 'Puntos Negativos',
-				data: [12, 19, 3 ],
-				backgroundColor: [
-					'rgba(255, 99, 132, 0.2)', //ROJO
-					'rgba(255, 99, 132, 0.2)', //ROJO
-					'rgba(255, 99, 132, 0.2)' //ROJO
-				],
-				borderColor: [
-					'rgba(255,99,132,1)', //ROJO
-					'rgba(255,99,132,1)', //ROJO
-					'rgba(255,99,132,1)' //ROJO
-				],
-				borderWidth: 1
-			}
-		]
-	},
-	options: {
-		scales: {
-			xAxes: [{
-							 stacked: true
-					 }],
-			yAxes: [{
-				ticks: {
-					beginAtZero:true
-				}
-			}]
+
+	id_user = getUrlParameter('id_user');
+	puntajes = {nivel1:{positivos:0 , negativos:0}, nivel2:{positivos:0 , negativos:0}, nivel3:{positivos:0 , negativos:0}};
+	id_game = getUrlParameter('id_game');
+	name = getUrlParameter('nombre');
+	$('#juego').text('Juego: '+id_game);
+	$('#nombre').text('Usuario: '+name);
+	$.ajax({
+		type: "POST",
+		url: 'backend/web/app_dev.php/user_games_points',
+		data: {
+			id_user : id_user,
+			token : readCookie('token'),
 		},
-		responsive: true,
-		layout:{
-			padding:10
+		success: function(data){
+			console.log(data);
+			response = data.response;
+			for (var i = 0; i < response.length; i++) {
+				juego = response[i];
+				switch (juego.juego) {
+					case id_game:
+						switch (juego.nivel) {
+							case "1":
+								puntajes.nivel1.positivos = juego.positivos;
+								puntajes.nivel1.negativos = juego.negativos;
+								break;
+							case "2":
+								puntajes.nivel2.positivos = juego.positivos;
+								puntajes.nivel2.negativos = juego.negativos;
+								break;
+							case "3":
+								puntajes.nivel3.positivos = juego.positivos;
+								puntajes.nivel3.negativos = juego.negativos;
+								break;
+						}
+						break;
+					default:
+
+				}
+			}
+
+			loadChart(puntajes,id_game)
 		}
-	}
-});
+	});
+
+
+
+function loadChart(puntajes,id_game) {
+	console.log(puntajes);
+	var ctx = document.getElementById("myChart");
+	var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: ["Nivel 1", "Nivel 2", "Nivel 3"],
+			datasets: [
+				{
+					label: 'Puntos Positivos',
+					data: [puntajes.nivel1.positivos, puntajes.nivel2.positivos, puntajes.nivel3.positivos ],
+					backgroundColor: [
+						'rgba(54, 162, 235, 0.2)', //AZUL
+						'rgba(54, 162, 235, 0.2)', //AZUL
+						'rgba(54, 162, 235, 0.2)' //AZUL
+					],
+					borderColor: [
+						'rgba(54, 162, 235, 1)', //AZUL
+						'rgba(54, 162, 235, 1)', //AZUL
+						'rgba(54, 162, 235, 1)' //AZUL
+					],
+					borderWidth: 1
+				},
+				{
+					label: 'Puntos Negativos',
+					data: [puntajes.nivel1.negativos, puntajes.nivel2.negativos, puntajes.nivel3.negativos ],
+					backgroundColor: [
+						'rgba(255, 99, 132, 0.2)', //ROJO
+						'rgba(255, 99, 132, 0.2)', //ROJO
+						'rgba(255, 99, 132, 0.2)' //ROJO
+					],
+					borderColor: [
+						'rgba(255,99,132,1)', //ROJO
+						'rgba(255,99,132,1)', //ROJO
+						'rgba(255,99,132,1)' //ROJO
+					],
+					borderWidth: 1
+				}
+			]
+		},
+		options: {
+			scales: {
+				xAxes: [{
+								 stacked: true
+						 }],
+				yAxes: [{
+					ticks: {
+						beginAtZero:true
+					}
+				}]
+			},
+			responsive: true,
+			layout:{
+				padding:10
+			}
+		}
+	});
+}
+
+
 </script>
 <style media="screen">
 @import url(http://fonts.googleapis.com/css?family=Roboto);
