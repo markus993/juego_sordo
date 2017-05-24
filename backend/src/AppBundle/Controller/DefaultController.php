@@ -314,16 +314,8 @@ class DefaultController extends Controller
       return new JsonResponse(array('response' => $this->info_user($data['token'],$data['id'])));
     }
 
-    /**
-     *  @Route(
-     *    path = "/mail_user_password",
-     *    name ="mail_user_password",
-     *    methods = { "POST" }
-     *  )
-     */
-    public function mail_user_passwordAction(Request $request){
-      $data = $request->request->all();
-      $info =  $this->info_user($data['token'],$data['id']);
+    protected function mail_user_passwordAction($token,$id){
+      $info =  $this->info_user($token,$id);
       $messagetxt = "
       <br>
       <div>
@@ -354,7 +346,7 @@ class DefaultController extends Controller
     public function create_userAction(Request $request){
       $data = $request->request->all();
       $out = $this->create_user($data['name'],$data['last'],$data['user'],$data['mail'],$data['sexo']);
-      $this->mail_user_passwordAction($request);
+      $this->mail_user_passwordAction($data['token'],$out);
       return new JsonResponse(array('response' => $out));
     }
 
